@@ -1,27 +1,77 @@
-\documentclass{article}
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+% if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+% paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+% needed if you want to
+% use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+
 \usepackage[latin9]{inputenc}
 \usepackage{mathtools}
 \usepackage{amsmath}
-\usepackage{amsthm}
 \usepackage{amssymb}
+
+\let\proof\relax
+\let\endproof\relax
+\usepackage{amsthm}
+
 \usepackage{graphicx}
 \PassOptionsToPackage{normalem}{ulem}
 \usepackage{ulem}
 \usepackage{microtype}
 \usepackage[unicode=true,
- bookmarks=false,
- breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
- {hyperref}
+bookmarks=false,
+breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
+{hyperref}
 \usepackage{subfigure}
-
 \input{mathdef.tex}
+
+\title{\LARGE \bf
+	Robust-Adaptive Interval Predictive Control for Linear Uncertain Systems
+}
+
+%\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
+%         \thanks{*Use the $\backslash$thanks command to put information here}\\
+%         Faculty of Electrical Engineering, Mathematics and Computer Science\\
+%         University of Twente\\
+%         7500 AE Enschede, The Netherlands\\
+%         {\tt\small h.kwakernaak@autsubmit.com}}
+%         \hspace*{ 0.5 in}
+%         \parbox{3 in}{ \centering Pradeep Misra**
+%         \thanks{**The footnote marks may be inserted manually}\\
+%        Department of Electrical Engineering \\
+%         Wright State University\\
+%         Dayton, OH 45435, USA\\
+%         {\tt\small pmisra@cs.wright.edu}}
+%}
+
+\author{Edouard Leurent and Denis Efimov and Odalric-Ambrym Maillard% <-this % stops a space
+	\thanks{This work was not supported by any organization}% <-this % stops a space
+	\thanks{Edouard Leurent is with Renault Group, Paris, France
+		{\tt\small edouard.leurent@inria.fr}}%
+	\thanks{Denis Efimov is with Inria Valse, Inria Lille Nord-Europe, France
+		{\tt\small denis.efimov@inria.fr}}%
+}
+
 
 
 \begin{document}
 
-\title{Robust-Adaptive Interval Predictive Control for Linear Uncertain Systems}
-\author{Edouard Leurent, Denis Efimov, Odalric-Ambrym Maillard}
 \maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
 \begin{abstract}
 We consider the problem of stabilization of a linear system, under
 state and control constraints, and subject to bounded disturbances
