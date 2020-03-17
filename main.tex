@@ -322,10 +322,12 @@ for any $t\in\mathbb{R_{+}}$.
 \end{assumption}
 Under Assumption \ref{assu:PE}, for any $g\geq1$ and $g\ell<T\leq(g+1)\ell$
 we get:
-\begin{gather*}
-\int_{t}^{t+T}\Phi^{\top}(s)\Phi(s)ds=\int_{t+g\ell}^{t+T}\Phi^{\top}(s)\Phi(s)ds+\sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\Phi^{\top}(s)\Phi(s)ds\\
-\geq\sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\Phi^{\top}(s)\Phi(s)ds\geq\frac{g}{g+1}\frac{\vartheta}{\ell}TI_{d}\geq\frac{\vartheta}{2\ell}TI_{d},
-\end{gather*}
+\begin{align*}
+\int_{t}^{t+T}\Phi^{\top}(s)\Phi(s)ds & = & \int_{t+g\ell}^{t+T}\Phi^{\top}(s)\Phi(s)ds\\
+& & + \sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\Phi^{\top}(s)\Phi(s)ds\\
+& \geq & \sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\Phi^{\top}(s)\Phi(s)ds\\
+& \geq & \frac{g}{g+1}\frac{\vartheta}{\ell}TI_{d}\geq\frac{\vartheta}{2\ell}TI_{d},
+\end{align*}
 \emph{i.e}., the matrix function $\int_{t}^{t+T}\Phi^{\top}(s)\Phi(s)ds$
 is nonsingular for any $t\geq0$ and $T\geq\ell$.
 
@@ -922,7 +924,57 @@ includes the previous one).
 Let us illustrate efficiency of the proposed MPC approach by numerical
 experiments.
 
-\section{\label{sec:experiments} Experiments}
+\section{\label{sec:experiments} Numerical experiment}
+
+We tackle the problem of the robust adaptive lateral control of an autonomous vehicle under tire friction uncertainty, for a lane-keeping application.
+
+We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$
+
+We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$.
+Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with:
+% \begin{align*}
+% \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
+% \dot{r} &= \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{I_z v_x} v_y + \frac{-2(C_{\alpha_f}a^2 + C_{\alpha_r}b^2)}{I_z v_x} r + \frac{a}{I_z} u.
+% \end{align*}
+% We can rewrite them as :
+\begin{align*}
+x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\transp,\quad
+\theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp,
+\end{align*}
+\[
+A = \begin{bmatrix}
+0 & v_x & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 0 & - v_x \\
+0 & 0 & 0 & 0
+\end{bmatrix},\quad
+B =
+\begin{bmatrix}
+0 \\
+0 \\
+\frac{2}{m} \\
+\frac{a}{I_z}
+\end{bmatrix},
+\]
+
+\[
+\phi_1 = \frac{-2}{m v_x I_z}\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & I_z & a I_z \\
+0 & 0 & a m & a^2 m \\
+\end{bmatrix},
+\]
+
+\[
+\phi_2 = \frac{-2}{m v_x I_z}\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & I_z & -b I_z \\
+0 & 0 & - bm & b^2 m \\
+\end{bmatrix}.
+\]
+
 
 
 \section*{Conclusion}
