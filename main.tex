@@ -975,7 +975,7 @@ B =
 \end{bmatrix}.
 \]
 
-
+Instead of simply stabilizing the vehicle state $x$, we instead track a trajectory $x_r(t) = [y_r(t), 0, 0, 0]^\transp$. Thus, we consider the state $\tilde{x} = x-x_r$, which adds a supplementary unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ in the dynamics \eqref{eq:dynamics} and measurement \eqref{eq:outputs}, but since these terms are bounded in $\X$ and $\U$.
 
 \section*{Conclusion}
 
