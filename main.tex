@@ -926,11 +926,9 @@ experiments.
 
 \section{\label{sec:experiments} Numerical experiment}
 
-We tackle the problem of the robust adaptive lateral control of an autonomous vehicle under tire friction uncertainty, for a lane-keeping application.
+We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application.
 
-We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$
-
-We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$.
+We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$.
 Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with:
 % \begin{align*}
 % \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
@@ -975,7 +973,7 @@ B =
 \end{bmatrix}.
 \]
 
-Instead of simply stabilizing the vehicle state $x$, we instead track a trajectory $x_r(t) = [y_r(t), 0, 0, 0]^\transp$. Thus, we consider the state $\tilde{x} = x-x_r$, which adds a supplementary unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ in the dynamics \eqref{eq:dynamics} and measurement \eqref{eq:outputs}, but since these terms are bounded in $\X$ and $\U$.
+Instead of simply stabilizing the vehicle state $x$, we track a trajectory $x_r(t) = [y_r(t), 0, 0, 0]^\transp$. Thus, we consider the state $\tilde{x} = x-x_r$, which adds a supplementary unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ in the dynamics \eqref{eq:dynamics} and measurement \eqref{eq:outputs}, but since these terms are bounded in $\X$ and $\U$.
 
 \section*{Conclusion}
 
