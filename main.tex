@@ -35,6 +35,9 @@ bookmarks=false,
 breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
 {hyperref}
 \usepackage{subfigure}
+
+\usepackage{cleveref}
+
 \input{mathdef.tex}
 
 \title{\LARGE \bf
@@ -57,11 +60,9 @@ breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
 %}
 
 \author{Edouard Leurent and Denis Efimov and Odalric-Ambrym Maillard% <-this % stops a space
-	\thanks{This work was not supported by any organization}% <-this % stops a space
-	\thanks{Edouard Leurent is with Renault Group, Paris, France
-		{\tt\small edouard.leurent@inria.fr}}%
-	\thanks{Denis Efimov is with Inria Valse, Inria Lille Nord-Europe, France
-		{\tt\small denis.efimov@inria.fr}}%
+	\thanks{This work was not supported by any organization.}% <-this % stops a space
+	\thanks{Edouard Leurent is with Renault Group, Paris, France.}%
+	\thanks{Denis Efimov and Odalric-Ambrym Maillard are with Inria Valse and Inria SequeL respectively, Inria Lille Nord-Europe, France.}%
 }
 
 
@@ -101,7 +102,7 @@ issues are the methods based on reinforcement (deep) learning \cite{mnih2015huma
 or the Model Predictive Control (MPC) algorithms \cite{Basar1996,MPC1,MPC:Tube2},
 which are more common in industrial applications (there are also techniques
 relying on both frameworks as in \cite{Lenz2015,Dean2018}). The advantages
-of these tools consist in the ability to ensure a robust constraint
+of these tools consist in the ability to provide a robust constraint
 satisfaction, while ensuring optimization of a selected cost. A shortage
 is their increased (online) computational complexity, which becomes
 less important with growing numeric capacities of smart sensors and
@@ -140,7 +141,7 @@ in Section \ref{sec:prediction}, together with an unconstrained robust
 stabilizing control that uses the interval predictor variables only.
 An MPC algorithm, which is based on the designed interval predictors,
 will be developed and analyzed in Section \ref{sec:control}. Applicability
-of the proposed control strategy will be demonstrated in Section \ref{sec:experiments}.
+of the proposed control strategy will be demonstrated on lane-keeping application for a self-driving car in Section \ref{sec:experiments}.
 
 \section*{Notation}
 
@@ -562,7 +563,7 @@ implies the same property of $x(t)$. Therefore, in order to regulate
 minimizing the asymptotic amplitude of the state $\xi(t)$ for given
 input $\delta(t)$ \cite{Efimov2013a}. In other words, it is necessary
 to design a control $u(t)$ that input-to-state stabilizes \eqref{eq:predictor}.
-It is proposed to look for the control in the form:
+It is proposed to look for such a control in the form:
 \begin{equation}
 u(t)=K_{0}\xi(t)+K_{1}\xi^{+}(t)+K_{2}\xi^{-}(t)+S\delta(t),\label{eq:control_pr}
 \end{equation}
@@ -728,7 +729,7 @@ under substitution $U_{0}=K_{0}P^{-1}$, $U_{1}=K_{1}Z_{+}^{-1}$,
 $U_{2}=K_{2}Z_{-}^{-1}$, $\tilde{Q}=P^{-1}QP^{-1}$, $\tilde{Q}_{+}=Z_{+}^{-1}Q_{+}Z_{+}^{-1}$,
 $\tilde{Q}_{-}=Z_{-}^{-1}Q_{-}Z_{-}^{-1}$, $\tilde{\Psi}=Z_{-}^{-1}\Psi Z_{+}^{-1}$,
 $\tilde{\Psi}_{+}=P^{-1}\Psi_{+}Z_{+}^{-1}$ and $\tilde{\Psi}_{-}=P^{-1}\Psi_{-}Z_{-}^{-1}$.
-Hence, $\Upsilon\preceq0$ provided that $\Pi\preceq0$. The restrictions
+Hence, $\Upsilon\preceq0$ provided that $\Pi\preceq0$. The inequalities
 $\tilde{Q}+\min\{\tilde{Q}_{+},\tilde{Q}_{-}\}+2\min\{\tilde{\Psi}_{+},\tilde{\Psi}_{-}\}>0$
 and $Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0$ are equivalent
 due to the diagonal structure of all matrices. Therefore, under introduced
@@ -800,14 +801,15 @@ matrices, such that the following constraints are satisfied:
 \item $\xi:[t_{i},t_{i}+T]\to\Real^{2p}$ is a solution of \eqref{eq:interval-predictor}
 with $t=t_{i}$ and additionally (to counteract the influence of big
 measurement perturbations)
-\begin{equation}
-[\underline{x}(t_{i}),\overline{x}(t_{i})]=\begin{cases}
+\begin{align}
+[\underline{x}&(t_{i}),\overline{x}(t_{i})]=\label{eq:update}\\
+&\begin{cases}
 [y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i=0\\
-\cap[\underline{x}_{0},\overline{x}_{0}];\\{}
+\quad\cap[\underline{x}_{0},\overline{x}_{0}];\\{}
 [y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i\geq1\\
 \quad\cap[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)],
-\end{cases}\label{eq:update}
-\end{equation}
+\end{cases}\nonumber
+\end{align}
 where $(\underline{x}^{\top}(t_{i-1}+\tau),\overline{x}^{\top}(t_{i-1}+\tau))^{\top}=\xi(t_{i-1}+\tau)$
 is obtained during the prediction on the previous iteration.
 \item $\xi(s)\in\X^{2}$ and $u(s)\in\U$ for $s\in[t_{i},t_{i}+T]$; 
@@ -973,13 +975,13 @@ B =
 \end{bmatrix}.
 \]
 
-Instead of simply stabilizing the vehicle state $x$, we track a trajectory $x_r(t) = [y_r(t), 0, 0, 0]^\transp$. Thus, we consider the state $\tilde{x} = x-x_r$, which adds a supplementary unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ in the dynamics \eqref{eq:dynamics} and measurement \eqref{eq:outputs}, but since these terms are bounded in $\X$ and $\U$.
+Instead of simply stabilizing the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\X = \pm[3, 2, 6, 6]^\transp$ and $\U=\pm[10]$.
 
-The \autoref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \autoref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. We verify the robust stability of this feedback with the LMI of \autoref{thm:ISS_pr}, and compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based MPC scheme to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation.
+The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based MPC scheme \cite{HomemDeMello2014} to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation. A video is available at \href{https://drive.google.com/file/d/18I6lPgAjS8buMB09OCF6WcHtHzUr_ql_/view?usp=sharing}{this url}.
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/lane-keeping.png}
-    \caption{\textbf{Top}: the model estimation showing the confidence region $\xi(t)$ from \eqref{eq:predictor}. \textbf{Bottom}: a lane keeping application, where a car must follow a lane center curve under unknown friction and perturbations. $X_f$ is shown in red, and $\xi(t)$ in a color gradient.}
+    \caption{\textbf{Top}: the model estimation showing the confidence region $\hat{\Theta}(t)$ from \eqref{eq:predictor}. \textbf{Bottom}: a lane keeping application, where a car must follow a lane-center curve under unknown friction and perturbations. $X_f$ is shown in red, and $\xi(t)$ as an area with a color gradient.}
     \label{fig:lane-keeping}
 \end{figure}
 
@@ -988,7 +990,7 @@ The \autoref{fig:lane-keeping} depicts our approach. The confidence region $\hat
 A robust adaptive MPC algorithm is presented for a partially known
 linear system subject to disturbances. The peculiarity of the proposed
 solution consists in utilization of interval predictor. The applicability
-of the method is demonstrated on a simulated application.
+of the method is demonstrated on a simulated car application.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
