@@ -41,7 +41,7 @@ breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
 \input{mathdef.tex}
 
 \title{\LARGE \bf
-	Robust-Adaptive Interval Predictive Control for Linear Uncertain Systems
+	Robust-Adaptive Interval Predictive Control \\for Linear Uncertain Systems
 }
 
 %\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
@@ -126,22 +126,21 @@ whose use will provide to a slightly nonlinear MPC algorithm an ability
 to keep the constraints in all admissible scenarios.
 
 The outline of this work is as follows. The detailed problem statement
-is given in Section \ref{sec:Problem}. We will consider a continuous-time
+is given in Section \ref{sec:Problem}. We consider a continuous-time
 linear system with uncertainty presented by state and output disturbances,
-and also the vector of unknown parameters belonging to a given compact
-set; and our goal will be the state stabilization with keeping the
+as well as a vector of unknown parameters belonging to a given compact
+set; and our goal is the state stabilization while satisfying the
 state and the control restrictions (due to presence of disturbances
-the input-to-state stability concept will utilized). A simple parameter
+the input-to-state stability concept is used). A simple parameter
 estimation algorithm with evaluation of its accuracy is discussed
-in \ref{sec:estimation} (this part is rather standard since it does
-not contain the main novelty). The obtained set of admissible values
+in \ref{sec:estimation} (this part is rather standard and does
+not constitute the main novelty). The obtained set of admissible values
 for the uncertain parameters allows an interval model to be obtained
-for the considered system. Two interval predictors will be introduced
+for the considered system. Two interval predictors are introduced
 in Section \ref{sec:prediction}, together with an unconstrained robust
 stabilizing control that uses the interval predictor variables only.
-An MPC algorithm, which is based on the designed interval predictors,
-will be developed and analyzed in Section \ref{sec:control}. Applicability
-of the proposed control strategy will be demonstrated on lane-keeping application for a self-driving car in Section \ref{sec:experiments}.
+In Section \ref{sec:control}, an MPC algorithm based on the designed interval predictors is developed, and analyzed in our main result. Applicability
+of the proposed control strategy is demonstrated on lane-keeping application for a self-driving car in Section \ref{sec:experiments}.
 
 \section*{Notation}
 
@@ -150,15 +149,15 @@ by $\Natural$, $\Real_{+}=\{\tau\in\Real:\tau\ge0\}$ and $\Natural_{+}=\Natural\
 
 Denote $[n]=\{1,2,\dots,n\}$ for any $n\in\Natural$.
 
-Euclidean norm for a vector $x\in\mathbb{R}^{n}$ will be denoted
+Euclidean norm for a vector $x\in\mathbb{R}^{n}$ is denoted
 as $|x|$, and for a measurable and locally essentially bounded input
 $u:\mathbb{R}_{+}\to\mathbb{R}^{m}$ the symbol $\Vert u\Vert_{[t_{0},t_{1})}$
 denotes its $L_{\infty}$ norm:
 \[
 \Vert u\Vert_{[t_{0},t_{1})}=\underset{t\in[t_{0},t_{1})}{\text{ess}\sup}|u(t)|,
 \]
-if $[t_{0},t_{1})=[0,+\infty)$ then we will simply write $\Vert u\Vert_{\infty}$.
-We will denote as $\mathcal{L}_{\infty}^{m}$ the set of all inputs
+if $[t_{0},t_{1})=[0,+\infty)$ then we simply write $\Vert u\Vert_{\infty}$.
+We denote as $\mathcal{L}_{\infty}^{m}$ the set of all inputs
 $u:\mathbb{R}_{+}\to\mathbb{R}^{m}$ with the property $\Vert u\Vert_{\infty}<\infty$.
 
 The symbol $I_{n}$ denotes the identity matrix with dimension $n\times n$.
@@ -235,9 +234,9 @@ state and the control, respectively.
 
 \subsection{Solution outline}
 
-In order to solve the posed robust constrain satisfaction and stabilization
+In order to solve the posed robust constraint satisfaction and stabilization
 problems, a robust-adaptive MPC solution \cite{Fukushima2007,Adetola2009,Adetola2011}
-will be developed. To this end, the following steps will be performed
+is developed. To this end, the following steps will be performed
 and explained later in details:
 \begin{enumerate}
 \item \uline{Model estimation}. In Section \ref{sec:estimation}, using
@@ -333,7 +332,7 @@ we get:
 is nonsingular for any $t\geq0$ and $T\geq\ell$.
 
 Taking into account this observation, in order to solve \eqref{eq:lin_regr}
-and obtain $\hat{\Theta}(t)$, we will use next the simplest least
+and obtain $\hat{\Theta}(t)$, we use next the simplest least
 square estimation algorithm:
 \begin{equation}
 \hat{\theta}(t)=\begin{cases}
@@ -471,7 +470,7 @@ are non-negative.}.
 In practice, this assumption is often verified. It is for instance
 the case whenever $A_{0}$ is diagonalizable, or a method from \cite{Efimov2013}
 computes a similarity transformation $Z$ when the system is observable
-with respect to a scalar output. To simplify the notation, we will
+with respect to a scalar output. To simplify the notation, we
 further assume that $Z=I_{p}$. Denote $\Delta A_{+}=\sum_{i=1}^{2^{d}}\Delta A_{i}^{+}$
 and $\Delta A_{-}=\sum_{i=1}^{2^{d}}\Delta A_{i}^{-}$ (by definition
 $\Delta A=\Delta A_{+}+\Delta A_{-}=\sum_{i=1}^{2^{d}}\Delta A_{i}$).
@@ -507,14 +506,14 @@ with $\theta\in[1,2]$ and $\omega(t)\in[-0.05,0.05]$.}
 
 \subsection{Stabilizing control for \eqref{eq:predictor-naive} and \eqref{eq:interval-predictor}}
 
-In the next section, a model-predictive control will be designed for
+In the next section, a model-predictive control is designed for
 the proposed interval predictors ensuring the system \eqref{eq:dynamics}
 stabilization under the restrictions \eqref{eq:constraints}. In this
-subsection we will demonstrate a possible solution to this problem
+subsection we demonstrate a possible solution to this problem
 skipping the constraints \eqref{eq:constraints}.
 
 Note that both interval predictors, \eqref{eq:predictor-naive} and
-\eqref{eq:interval-predictor}, admit a representation (we will use
+\eqref{eq:interval-predictor}, admit a representation in the form (we use the
 time argument $t=s$ in this subsection):
 \begin{equation}
 \dot{\xi}(t)=\cA_{0}\xi(t)+\cA_{1}\xi^{+}(t)+\cA_{2}\xi^{-}(t)+\cB u(t)+\delta(t),\label{eq:predictor}
@@ -681,7 +680,7 @@ as the set that asymptotically attracts all trajectories in \eqref{eq:closed-loo
 The conditions of Theorem \ref{thm:ISS_pr} assume that the control
 gains $K_{0},K_{1},K_{2}$ are given, let us find these gains as solutions
 of linear matrix inequalities:
-\begin{corrolary}
+\begin{corollary}
 If there exist diagonal matrices $P$, $\tilde{Q}$, $\tilde{Q}_{+}$,
 $\tilde{Q}_{-}$, $Z_{+}$, $Z_{-}$, $\tilde{\Psi}_{+}$, $\tilde{\Psi}_{-}$,
 $\tilde{\Psi}$, $\Gamma\in\Real^{2p\times2p}$ and matrices $U_{0},U_{1},U_{2}\in\Real^{q\times2p}$
@@ -708,7 +707,7 @@ I & I & -I & -\Gamma
 then \eqref{eq:closed-loop_pr} for $K_{0}=U_{0}P$, $K_{1}=U_{1}Z_{+}$
 and $K_{2}=U_{2}Z_{-}$ is input-to-state stable with respect to the
 inputs $\underline{\omega},\overline{\omega}$.
-\end{corrolary}
+\end{corollary}
 \begin{proof}
 Note that the conditions $P>0$, $Z_{+}>0$, $Z_{-}>0$ imply $P+\min\{Z_{+},Z_{-}\}>0$,
 and 
@@ -749,15 +748,15 @@ by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-generic},
 it implies that the system \eqref{eq:dynamics} also will reach a
 neighborhood of the origin under the control \eqref{eq:control_pr}.
 Hence, the posed control problem would be solved provided that \eqref{eq:constraints}
-holds. In order to ensure the robust constraint satisfaction we will
+holds. In order to ensure the robust constraint satisfaction we
 consider an MPC design in the next section.
 
 \section{\label{sec:control} Robust Control}
 
-For brevity, the results of this section will be given for the predictor
+For brevity, the results of this section are given for the predictor
 \eqref{eq:interval-predictor} only (and the case of \eqref{eq:predictor-naive}
 can be considered by skipping Assumption \ref{assu:metzler} in the
-formulation). We will need the following hypothesis in this section:
+formulation). We need the following hypothesis in this section:
 \begin{assumption}
 \label{assu:ctrl} There exist $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$
 satisfying the conditions of Theorem \ref{thm:ISS_pr} for the matrices
@@ -781,8 +780,8 @@ also hold for such a control.
 
 Define $T>0$ and $\tau\in(0,T)$ as the interval of prediction and
 the application time for MPC, \emph{i.e}., at each $t\geq0$ to design
-input $u(t)$, an optimal control problem will be solved on the interval
-$[t,t+T]$, and this optimal control problem will be resolved again
+input $u(t)$, an optimal control problem is solved on the interval
+$[t,t+T]$, and this optimal control problem is resolved again
 after $\tau$ units of time (on the interval $[t,t+\tau)$ the obtained
 optimal control is applied). Denote $t_{i}=i\tau$ for $i\in\Natural_{+}$,
 then the developed MPC algorithm can be formalized as follows for
@@ -822,7 +821,7 @@ u(t)=\begin{cases}
 \eqref{eq:control_pr} & \xi(t_{i})\in\X_{f}
 \end{cases},\label{eq:control}
 \end{equation}
-where the gains $K_{0},K_{1},K_{2}$ are taken from Assumption \ref{assu:ctrl}.
+where $K_{0},K_{1},K_{2}$ are taken from Assumption \ref{assu:ctrl}.
 \end{enumerate}
 As we can conclude, the idea of the proposed dual MPC scheme (see
 also \cite{Michalska1993,MPC1,MPC:Tube2}) is to use an open-loop
@@ -923,14 +922,13 @@ then the new set $\X_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
 can be used in \eqref{eq:control} (especially if this new $\X_{f}$
 includes the previous one).
 \end{remark}
-Let us illustrate efficiency of the proposed MPC approach by numerical
+
+We illustrate the efficiency of the proposed MPC approach by numerical
 experiments.
 
 \section{\label{sec:experiments} Numerical experiment}
 
-We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application.
-
-We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$.
+We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
 Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with:
 % \begin{align*}
 % \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
@@ -981,7 +979,7 @@ The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\T
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/lane-keeping.png}
-    \caption{\textbf{Top}: the model estimation showing the confidence region $\hat{\Theta}(t)$ from \eqref{eq:predictor}. \textbf{Bottom}: a lane keeping application, where a car must follow a lane-center curve under unknown friction and perturbations. $X_f$ is shown in red, and $\xi(t)$ as an area with a color gradient.}
+    \caption{\textbf{Top}: the model estimation showing the confidence region $\hat{\Theta}(t)$ from \eqref{eq:predictor} at different times $t$. \textbf{Bottom}: a lane keeping application, where a car must follow a lane-center curve under unknown friction and perturbations. $X_f$ is shown in green, and $\xi(t)$ as an area with a color gradient.}
     \label{fig:lane-keeping}
 \end{figure}
 
