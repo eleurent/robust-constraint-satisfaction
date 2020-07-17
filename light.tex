@@ -60,7 +60,6 @@ breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
 %}
 
 \author{Edouard Leurent and Denis Efimov and Odalric-Ambrym Maillard% <-this % stops a space
-	\thanks{This work was not supported by any organization.}% <-this % stops a space
 	\thanks{Edouard Leurent is with Renault Group, Paris, France.}%
 	\thanks{Denis Efimov and Odalric-Ambrym Maillard are with Inria Valse and Inria SequeL respectively, Inria Lille Nord-Europe, France.}%
 }
@@ -140,25 +139,16 @@ for the considered system. Two interval predictors are introduced
 in Section \ref{sec:prediction}, together with an unconstrained robust
 stabilizing control that uses the interval predictor variables only.
 In Section \ref{sec:control}, an MPC algorithm based on the designed interval predictors is developed, and analyzed in our main result. Applicability
-of the proposed control strategy is demonstrated on lane-keeping application for a self-driving car in Section \ref{sec:experiments}.
+of the approach is demonstrated on lane-keeping application for a self-driving car in Section \ref{sec:experiments}.
 
 \section*{Notation}
 
-Denote $[n]=\{1,2,\dots,n\}$ for any $n\in\Natural$. Euclidean norm for a vector $x\in\mathbb{R}^{n}$ is denoted
-as $|x|$, and for a measurable and locally essentially bounded input
-$u:\mathbb{R}_{+}\to\mathbb{R}^{m}$ the symbol $\Vert u\Vert_{[t_{0},t_{1})}$
-denotes its $L_{\infty}$ norm:
-$$\Vert u\Vert_{[t_{0},t_{1})}={\text{ess}\sup}_{t\in[t_{0},t_{1})}|u(t)|,$$
-if $[t_{0},t_{1})=[0,+\infty)$ then we simply write $\Vert u\Vert_{\infty}$.
+Denote $[n]=\{1,2,\dots,n\}$ for any $n\in\Natural$. Euclidean norm is denoted
+as $|\cdot|$, and $L_{\infty}$ norm on $[t_{0},t_{1})$ as $\Vert u\Vert_{[t_{0},t_{1})}$.
 We denote as $\mathcal{L}_{\infty}^{m}$ the set of all inputs
 $u:\mathbb{R}_{+}\to\mathbb{R}^{m}$ with the property $\Vert u\Vert_{\infty}<\infty$.
-The symbol $I_{n}$ denotes the identity matrix with dimension $n\times n$.
-For a matrix $A\in\Real^{n\times n}$ the vector of its eigenvalues
-is denoted as $\lambda(A)$ and $\Vert A\Vert_{2}=\sqrt{\max_{i\in[n]}\lambda_{i}(A^{\top}A)}$
-is the induced $L_{2}$ matrix norm.
 Given a matrix $A\in\Real^{n\times n}$, denote $A^{+}=\max\{A,0\}$,
-$A^{-}=A^{+}-A$, $|A|=A^{+}+A^{-}$ (all operations are understood
-elementwise, the same for vectors). 
+$A^{-}=A^{+}-A$, $|A|=A^{+}+A^{-}$. 
 For two vectors $x_{1},x_{2}\in\mathbb{R}^{n}$ or matrices $A_{1},A_{2}\in\Real^{n\times n}$,
 the relations $x_{1}\le x_{2}$ and $A_{1}\le A_{2}$ are understood
 elementwise. 
@@ -184,14 +174,9 @@ y_{1}(t)=x(t)+\nu_{1}(t),\;y_{2}(t)=\dot{x}(t)+\nu_{2}(t),\label{eq:outputs}
 \end{gather}
 where $\nu(t)=[\nu_{1}^{\top}(t)\;\nu_{2}^{\top}(t)]^{\top}\in\Real^{2p}$
 is the measurement disturbance, $\nu\in\cL_{\infty}^{2p}$. Roughly
-speaking, we assume that the state $x(t)$ and its derivative $\dot{x}(t)$
-are estimated using some observation/differentiation approaches \cite{Besancon2007,Reichhartinger2018},
-which introduce additional noise due to computations; since design
-of these estimation algorithms is not in the scope of the present
-work, we simply assume \eqref{eq:outputs}. 
-More precise hypotheses over the system \eqref{eq:dynamics}, \eqref{eq:outputs}
-initial uncertainty, state $\omega$ and the output $\nu$ disturbances
-are as follows:
+speaking, we assume with \eqref{eq:outputs} that the state $x(t)$ and its derivative $\dot{x}(t)$
+are estimated using some observation/differentiation approaches \cite{Besancon2007,Reichhartinger2018}.
+
 \begin{assumption}
 \label{assu:main} There exist signals $\underline{\omega},\overline{\omega}\in\cL_{\infty}^{r}$,
 $\underline{\nu},\overline{\nu}\in\cL_{\infty}^{2p}$ and two vectors
@@ -201,11 +186,9 @@ $\underline{x}_{0},\overline{x}_{0}\in\Real^{p}$ such that
 \underline{x}_{0}\leq x(0)\leq\overline{x}_{0}.
 \end{gather*}
 \end{assumption}
-We denote $\underline{\nu}(t)=[\underline{\nu}_{1}^{\top}(t)\;\underline{\nu}_{2}^{\top}(t)]^{\top}$
-and $\overline{\nu}(t)=[\overline{\nu}_{1}^{\top}(t)\;\overline{\nu}_{2}^{\top}(t)]^{\top}$,
-these signals may represent the converging bounds on the estimation
-errors of the observers used in \eqref{eq:outputs} to reconstruct
-$x(t)$ and $\dot{x}(t)$.
+%We denote $\underline{\nu}(t)=[\underline{\nu}_{1}^{\top}(t)\;\underline{\nu}_{2}^{\top}(t)]^{\top}$
+%and $\overline{\nu}(t)=[\overline{\nu}_{1}^{\top}(t)\;\overline{\nu}_{2}^{\top}(t)]^{\top}$.
+%these signals may represent the converging bounds on the estimation errors of the observers used in \eqref{eq:outputs} to reconstruct $x(t)$ and $\dot{x}(t)$.
 
 \subsection{Problem}
 
@@ -219,46 +202,46 @@ where $[\underline{x}_{0},\overline{x}_{0}]\subset\X\subset\Real^{p}$
 and $\U\subset\Real^{q}$ are given bounded constraint sets for the
 state and the control, respectively.
 
-\subsection{Solution outline}
-
-In order to solve the posed robust constraint satisfaction and stabilization
-problems, a robust-adaptive MPC solution \cite{Fukushima2007,Adetola2009,Adetola2011}
-is developed. To this end, the following steps will be performed
-and explained later in details:
-\begin{enumerate}
-\item \uline{Model estimation}. In Section \ref{sec:estimation}, using
-the measurements \eqref{eq:outputs}, a confidence region $\hat{\Theta}(t)\subseteq\Theta$
-for the admissible values of $\theta$ is estimated for $t\geq0$.
-\item \uline{State prediction}. We aim to derive an interval predictor
-\cite{Dinh2014,leurent2019interval} for the system \eqref{eq:dynamics},
-which is given in Section \ref{sec:prediction}. This predictor takes
-the information on the observed current state $x(t)\in[y_{1}(t)-\underline{\nu}_{1}(t),y_{1}(t)+\overline{\nu}_{1}(t)]$
-(and possibly the previously predicted quantities
-also), the estimated confidence region $\hat{\Theta}(t)$, a planned
-control signal $u:[t,+\infty)\to\Real^{q}$ and the admissible bounds
-on the state perturbation $[\underline{\omega}(t),\overline{\omega}(t)]$;
-and it outputs an interval $[\ux(t),\ox(t)]$, where $\ux,\ox\in\cL_{\infty}^{p}$
-are the state bounds, that must verify the inclusion property: 
-\begin{equation}
-\ux(s)\leq x(s)\leq\ox(s),\quad\forall s\geq t.\label{eq:inclusion-generic}
-\end{equation}
-For this purpose we leverage recent results from the interval observer
-and predictor design literature \cite{Dinh2014,leurent2019interval}.
-Finally, a stabilizing feedback is proposed for the interval predictor
-of \eqref{eq:dynamics}, which does not take into account the restrictions
-\eqref{eq:constraints}.
-\item \uline{Robust MPC}. The formulation of MPC is given and the conditions
-of the control goal achievement are formulated in Section \ref{sec:control}.
-The MPC is formulated for the interval predictor designed previously. 
-\item \uline{Experiments}. Finally, in Section \ref{sec:experiments}
-we demonstrate the applicability of our proposed control strategy
-in numerical experiments.
-\end{enumerate}
+%\subsection{Solution outline}
+%
+%In order to solve the posed robust constraint satisfaction and stabilization
+%problems, a robust-adaptive MPC solution \cite{Fukushima2007,Adetola2009,Adetola2011}
+%is developed. To this end, the following steps will be performed
+%and explained later in details:
+%\begin{enumerate}
+%\item \uline{Model estimation}. In Section \ref{sec:estimation}, using
+%the measurements \eqref{eq:outputs}, a confidence region $\hat{\Theta}(t)\subseteq\Theta$
+%for the admissible values of $\theta$ is estimated for $t\geq0$.
+%\item \uline{State prediction}. We aim to derive an interval predictor
+%\cite{Dinh2014,leurent2019interval} for the system \eqref{eq:dynamics},
+%which is given in Section \ref{sec:prediction}. This predictor takes
+%the information on the observed current state $x(t)\in[y_{1}(t)-\underline{\nu}_{1}(t),y_{1}(t)+\overline{\nu}_{1}(t)]$
+%(and possibly the previously predicted quantities
+%also), the estimated confidence region $\hat{\Theta}(t)$, a planned
+%control signal $u:[t,+\infty)\to\Real^{q}$ and the admissible bounds
+%on the state perturbation $[\underline{\omega}(t),\overline{\omega}(t)]$;
+%and it outputs an interval $[\ux(t),\ox(t)]$, where $\ux,\ox\in\cL_{\infty}^{p}$
+%are the state bounds, that must verify the inclusion property: 
+%\begin{equation}
+%\ux(s)\leq x(s)\leq\ox(s),\quad\forall s\geq t.\label{eq:inclusion-generic}
+%\end{equation}
+%For this purpose we leverage recent results from the interval observer
+%and predictor design literature \cite{Dinh2014,leurent2019interval}.
+%Finally, a stabilizing feedback is proposed for the interval predictor
+%of \eqref{eq:dynamics}, which does not take into account the restrictions
+%\eqref{eq:constraints}.
+%\item \uline{Robust MPC}. The formulation of MPC is given and the conditions
+%of the control goal achievement are formulated in Section \ref{sec:control}.
+%The MPC is formulated for the interval predictor designed previously. 
+%\item \uline{Experiments}. Finally, in Section \ref{sec:experiments}
+%we demonstrate the applicability of our proposed control strategy
+%in numerical experiments.
+%\end{enumerate}
 
 \section{\label{sec:estimation} Model Estimation}
 
 To derive a confidence region $\hat{\Theta}(t)\subseteq\Theta$ for
-the uncertain parameters $\theta$, the structure of matrix function
+the uncertain parameters $\theta$, the structure of
 $A(\theta)$ must be specified:
 \begin{assumption}
 \label{assu:structure} There exist known matrices $A,\phi_{1},\dots,\phi_{d}\in\Real^{p\times p}$
@@ -268,34 +251,34 @@ A(\theta)=A+\sum_{i=1}^{d}\theta_{i}\phi_{i}.
 \]
 
 \end{assumption}
-From \eqref{eq:dynamics}, \eqref{eq:outputs} and this assumption
-we get the linear regression for $t\geq0$:
+\eqref{eq:dynamics}, \eqref{eq:outputs} and \Cref{assu:structure}
+yield the linear regression:
 \begin{equation}
 y(t)=\Phi(t)\theta+\eta(t),\label{eq:lin_regr}
 \end{equation}
 where $y(t)=y_{2}(t)-Ay_{1}(t)-Bu(t)$ and $\Phi(t)=[\phi_{1}y_{1}(t)\dots\phi_{d}y_{1}(t)]\in\Real^{p\times d}$
-are known vector and matrix signals, and
+are known signals, and
 \begin{align*}
-\eta(t) & =D\omega(t)-\left(A+\sum_{i=1}^{d}\theta_{i}\phi_{i}\right)\nu_{1}(t)+\nu_{2}(t)
+\eta(t) & =D\omega(t)-\left(A+\textstyle\sum_{i=1}^{d}\theta_{i}\phi_{i}\right)\nu_{1}(t)+\nu_{2}(t)
 \end{align*}
 is the combined perturbation, which is from $\cL_{\infty}^{p}$ under
 assumptions \ref{assu:main} and \ref{assu:structure}:
 $
-\Vert\eta\Vert_{\infty}\leq\bar{\eta},
+\Vert\eta\Vert_{\infty}\leq\bar{\eta}.
 $
-where
-\begin{gather*}
-\bar{\eta}=\Vert D\Vert_{2}\max\{\Vert\underline{\omega}\Vert_{\infty},\Vert\overline{\omega}\Vert_{\infty}\}+\max\{1,\sup_{\theta\in\Theta}\Vert A\\
-+\sum_{i=1}^{d}\theta_{i}\phi_{i}\Vert_{2}\}\max\{\Vert\underline{\nu}\Vert_{\infty},\Vert\overline{\nu}\Vert_{\infty}\}.
-\end{gather*}
-Note that similarly:
-\begin{gather*}
-\sup_{t\geq0}\Vert\Phi(t)\Vert_{2}\leq\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}\Vert y_{1}\Vert_{\infty}\\
-\leq\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}(\Vert x\Vert_{\infty}+\max\{\Vert\underline{\nu}_{1}\Vert_{\infty},\Vert\overline{\nu}_{1}\Vert_{\infty}\}),
-\end{gather*}
-where $\Vert x\Vert_{\infty}\leq X=\sup_{x\in\X}|x|$ if the constraints
-\eqref{eq:constraints} are satisfied for $t\geq0$ (the control $u(t)$
-is properly designed). 
+%,where
+%\begin{align*}
+%\bar{\eta}=&\Vert D\Vert_{2}\max\{\Vert\underline{\omega}\Vert_{\infty},\Vert\overline{\omega}\Vert_{\infty}\}\\
+%&+\max\{1,\sup_{\theta\in\Theta}\Vert A+\textstyle\sum_{i=1}^{d}\theta_{i}\phi_{i}\Vert_{2}\}\max\{\Vert\underline{\nu}\Vert_{\infty},\Vert\overline{\nu}\Vert_{\infty}\}.
+%\end{align*}
+%Note that similarly:
+%\begin{gather*}
+%\sup_{t\geq0}\Vert\Phi(t)\Vert_{2}\leq\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}\Vert y_{1}\Vert_{\infty}\\
+%\leq\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}(\Vert x\Vert_{\infty}+\max\{\Vert\underline{\nu}_{1}\Vert_{\infty},\Vert\overline{\nu}_{1}\Vert_{\infty}\}),
+%\end{gather*}
+%where $\Vert x\Vert_{\infty}\leq X=\sup_{x\in\X}|x|$ if the constraints
+%\eqref{eq:constraints} are satisfied for $t\geq0$ (the control $u(t)$
+%is properly designed). 
 
 We need a hypothesis on the level of excitation of $\Phi$ \cite{Morgan1977}:
 \begin{assumption}
@@ -307,19 +290,16 @@ satisfies $(\ell,\vartheta)$--Persistence of Excitation (PE) condition: for any 
 \]
 
 \end{assumption}
-Under Assumption \ref{assu:PE}, for any $g\geq1$ and $g\ell<T\leq(g+1)\ell$
-we get:
+Under Assumption \ref{assu:PE}, for any $g\geq1$ and $g\ell<T\leq(g+1)\ell$,
 \begin{align*}
-\int_{t}^{t+T}\Phi^{\top}(s)\Phi(s)ds & = & \int_{t+g\ell}^{t+T}\Phi^{\top}(s)\Phi(s)ds\\
-& & + \sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\Phi^{\top}(s)\Phi(s)ds\\
-& \geq & \sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\Phi^{\top}(s)\Phi(s)ds\\
-& \geq & \frac{g}{g+1}\frac{\vartheta}{\ell}TI_{d}\geq\frac{\vartheta}{2\ell}TI_{d},
+\int_{t}^{t+T}\Phi^{\top}\Phi(s)ds = & \left(\int_{t+g\ell}^{t+T}+ \sum_{i=0}^{g-1}\int_{t+i\ell}^{t+(i+1)\ell}\right)\Phi^{\top}\Phi(s)ds\\
+\geq & \frac{g}{g+1}\frac{\vartheta}{\ell}TI_{d}\geq\frac{\vartheta}{2\ell}TI_{d},
 \end{align*}
 \emph{i.e}., the matrix function $\int_{t}^{t+T}\Phi^{\top}(s)\Phi(s)ds$
-is nonsingular for any $t\geq0$ and $T\geq\ell$.
+is nonsingular.
 Taking into account this observation, in order to solve \eqref{eq:lin_regr}
 and obtain $\hat{\Theta}(t)$, we use next the simplest least
-square estimation algorithm:
+square estimation:
 \begin{equation}
 \hat{\theta}(t)=\begin{cases}
 \left(\int_{0}^{t}\Phi^{\top}(s)\Phi(s)ds\right)^{-1}\int_{0}^{t}\Phi^{\top}(s)y(s)ds & t\geq\ell\\
@@ -327,16 +307,14 @@ square estimation algorithm:
 \end{cases},\label{eq:LS}
 \end{equation}
 where $\hat{\theta}(t)\in\Real^{d}$ is an estimate of $\theta$ and
-$\theta_{0}\in\Theta$ is a constant initial estimate (more advanced
-solutions, which are less dependent on PE hypothesis \cite{Efimov2015,Efimov_PE2018},
-can be found in \cite{Chowdhary2012,Wang2019a}). The estimation error
-of \eqref{eq:LS} can be evaluated as follows: 
+$\theta_{0}\in\Theta$ is an initial estimate. %(more advanced solutions, which are less dependent on PE hypothesis \cite{Efimov2015,Efimov_PE2018}, can be found in \cite{Chowdhary2012,Wang2019a}). 
+The estimation error of \eqref{eq:LS} can be evaluated as: 
 \begin{proposition}
 \label{prop:LS} Let assumptions \ref{assu:main}, \ref{assu:structure}
 and \ref{assu:PE} be satisfied. Then, for all $t\geq\ell$:
-\[
+$
 |\hat{\theta}(t)-\theta|\leq\Delta\theta(\Vert x\Vert_{\infty}),\text{ where}
-\]
+$
 \[
 \Delta\theta(\Vert x\Vert_{\infty})=\frac{2\ell}{\vartheta}\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}(\Vert x\Vert_{\infty}+\max\{\Vert\underline{\nu}_{1}\Vert_{\infty},\Vert\overline{\nu}_{1}\Vert_{\infty}\})\bar{\eta}.
 \]
@@ -351,14 +329,11 @@ Using the fact that $\int_{0}^{t}\Phi^{\top}(s)\Phi(s)ds\geq\frac{\vartheta}{2\e
 for $t\geq\ell$, the claim follows the direct computations:
 \begin{align*}
 |\hat{\theta}(t)-\theta|&\leq\left\Vert \left(\int_{0}^{t}\Phi^{\top}(s)\Phi(s)ds\right)^{-1}\right\Vert _{2}\left|\int_{0}^{t}\Phi^{\top}(s)\eta(s)ds\right|\\
-&\leq\frac{2\ell}{\vartheta t}\int_{0}^{t}\Vert\Phi(s)\Vert_{2}|\eta(s)|ds\\
-&\leq\frac{2\ell}{\vartheta}\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}(\Vert x\Vert_{\infty}+\max\{\Vert\underline{\nu}_{1}\Vert_{\infty},\Vert\overline{\nu}_{1}\Vert_{\infty}\})\bar{\eta}.
+&\leq\frac{2\ell}{\vartheta t}\int_{0}^{t}\Vert\Phi(s)\Vert_{2}|\eta(s)|ds \leq \text{claimed bound}.
+% &\leq\frac{2\ell}{\vartheta}\max_{i\in[d]}\Vert\phi_{i}\Vert_{2}(\Vert x\Vert_{\infty}+\max\{\Vert\underline{\nu}_{1}\Vert_{\infty},\Vert\overline{\nu}_{1}\Vert_{\infty}\})\bar{\eta}.
 \end{align*}
 \end{proof}
-Therefore, if the noise $\nu$ and the disturbance $\omega$ are sufficiently
-small, then \eqref{eq:LS} may provide an accurate estimate of the
-value of $\theta$ for $t\geq\ell$.
-
+%Therefore, if the noise $\nu$ and the disturbance $\omega$ are sufficiently small, then \eqref{eq:LS} may provide an accurate estimate of the value of $\theta$ for $t\geq\ell$.
 To guarantee the robust constraint satisfaction we have to take into
 account not only an estimate $\hat{\theta}(t)$ of the vector of uncertain
 parameters $\theta$, but the set of all admissible values $\hat{\Theta}(t)\subseteq\Theta$
@@ -368,65 +343,65 @@ an estimate for $\hat{\Theta}(t)$:
 \begin{equation}
 \hat{\Theta}(t)=\Theta\bigcap_{\tau\in[\ell,t]}\{\tilde{\theta}\in\Real^{d}:|\hat{\theta}(\tau)-\tilde{\theta}|\leq\Delta\theta(X)\}.\label{eq:set_LS}
 \end{equation}
-As we can conclude, the property $\hat{\Theta}(t)\subseteq\Theta$
+The property $\hat{\Theta}(t)\subseteq\Theta$
 is satisfied for all $t\geq0$, and the size of $\hat{\Theta}(t)$
 is shrinking. We also can use some updated estimates on $\Vert x\Vert_{\infty}$
 in \eqref{eq:set_LS} instead of the worst case bound $X$.
-\begin{remark}
-It is easy to see from the proof of Proposition \ref{prop:LS} that
-if
-$
-\lim_{t\to+\infty}\frac{1}{t}\int_{0}^{t}|\eta(s)|ds=0,
-$
-\emph{i.e}., if the average value of $\eta$ is zero (the state and
-the output disturbances, $\omega$ and $\nu$, are zero-mean signals),
-then
-$
-\lim_{t\to+\infty}|\hat{\theta}(t)-\theta|=0,
-$
-and the algorithm \eqref{eq:LS} ensures an asymptotic estimation
-of $\theta$, while $\hat{\Theta}(t)$ in \eqref{eq:set_LS} contracts
-to the singleton $\{\theta\}$ with $t\to+\infty$.
-\end{remark}
+%\begin{remark}
+%It is easy to see from the proof of Proposition \ref{prop:LS} that
+%if
+%$
+%\lim_{t\to+\infty}\frac{1}{t}\int_{0}^{t}|\eta(s)|ds=0,
+%$
+%\emph{i.e}., if the average value of $\eta$ is zero (the state and
+%the output disturbances, $\omega$ and $\nu$, are zero-mean signals),
+%then
+%$
+%\lim_{t\to+\infty}|\hat{\theta}(t)-\theta|=0,
+%$
+%and the algorithm \eqref{eq:LS} ensures an asymptotic estimation
+%of $\theta$, while $\hat{\Theta}(t)$ in \eqref{eq:set_LS} contracts
+%to the singleton $\{\theta\}$ with $t\to+\infty$.
+%\end{remark}
 
 \section{\label{sec:prediction} State Prediction}
 
+ We aim to derive an interval predictor \cite{Dinh2014,leurent2019interval} for the system \eqref{eq:dynamics}, which takes the information on the observed current state $x(t)\in[y_{1}(t)-\underline{\nu}_{1}(t),y_{1}(t)+\overline{\nu}_{1}(t)]$, the estimated confidence region $\hat{\Theta}(t)$, a planned control signal $u:[t,+\infty)\to\Real^{q}$ and the admissible bounds
+on the state perturbation $[\underline{\omega}(t),\overline{\omega}(t)]$; and outputs an interval $[\ux(t),\ox(t)]$ that must verify the inclusion property: 
+\begin{equation}
+\ux(s)\leq x(s)\leq\ox(s),\quad\forall s\geq t.\label{eq:inclusion-generic}
+\end{equation}
+
 There exist many predictors based, \emph{e.g}., on zonotope \cite{le2012}
-or interval \cite{Dinh2014,leurent2019interval} presentation of the
-set of admissible values of $x(s)$ in future instants of time $s\geq t$.
+or interval \cite{Dinh2014,leurent2019interval} representation of the
+set of admissible values of $x(s)$.
 Opting the simplicity of implementation and computational efficiency,
-we utilize an interval predictor here that ensures the property \eqref{eq:inclusion-generic}.
+we use an interval predictor here that ensures the property \eqref{eq:inclusion-generic}.
 To this end we will assume that the set $\hat{\Theta}(t)$ computed
 by \eqref{eq:set_LS} is given, then there are two possible representations
 of uncertainty of $A(\theta)$ in \eqref{eq:dynamics}:
 \begin{itemize}
-\item interval:
+\item interval: for all $\theta\in\hat{\Theta}(t)$ and some $\underline{A},\overline{A}\in\Real^{p\times p}$,
 \begin{equation}
-\underline{A}\leq A(\theta)\leq\overline{A}\label{eq:interval}
+\underline{A}\leq A(\theta)\leq\overline{A}\label{eq:interval}.
 \end{equation}
-for all $\theta\in\hat{\Theta}(t)$ and some $\underline{A},\overline{A}\in\Real^{p\times p}$;
-\item polytopic:
+\item polytopic: for all $\theta\in\hat{\Theta}(t)$ and some $A_{0}=A(\hat{\theta}(t))$
+and $\Delta A_{i}=h_{i}\Delta\theta(X)$ for $h_{i}\in\{-1,1\}^{d}$
+with $i\in[2d]$,
 \begin{equation}
 A(\theta)\in\left\{ A_{0}+\sum_{i=1}^{2^{d}}\alpha_{i}\Delta A_{i}:\alpha_{i}\geq0,\sum_{i=1}^{2^{d}}\alpha_{i}=1\right\} \label{eq:polytope}
 \end{equation}
-for all $\theta\in\hat{\Theta}(t)$, where $A_{0}=A(\hat{\theta}(t))$
-and $\Delta A_{i}=h_{i}\Delta\theta(X)$ for $h_{i}\in\{-1,1\}^{d}$
-with $i\in[2d]$.
 \end{itemize}
 The matrices $\underline{A},\overline{A}$ can be calculated using
-the interval arithmetic for given set $\hat{\Theta}(t)$; suggestions
-for selection of $A_{0}$ and $\Delta A_{i}$ for $i\in[2d]$ are
-given in \eqref{eq:polytope} (other variants, as in \cite{delos2015},
-can also be used).
+the interval arithmetic for $\hat{\Theta}(t)$; suggestions
+for selection of $A_{0}$ and $\Delta A_{i}$ are
+given in \eqref{eq:polytope} (other variants can be used \cite{delos2015}).
 
 \subsection{Design of predictors}
 
 A simple solution providing \eqref{eq:inclusion-generic} is proposed
 in \cite{Efimov2012}, where the matrix interval arithmetic is used
-to derive the predictor equations (we assume that the control signal
-$u(s)$ is a known function of time for all $s\geq t$, and the signals
-$\underline{\omega}(s),\overline{\omega}(s)$ are specified in Assumption
-\ref{assu:main} for all $s\geq0$): 
+to derive the predictor: 
 \begin{proposition}
 [Simple predictor of \cite{Efimov2012}] Assume that Assumption
 \ref{assu:main} and the relations \eqref{eq:interval} are satisfied
@@ -449,7 +424,7 @@ polytopic structure \eqref{eq:polytope} to produce tighter and more
 stable predictions, at the price of an additional requirement:
 \begin{assumption}
 \label{assu:metzler} There exists a nonsingular matrix $Z\in\Real^{p\times p}$
-such that $Z^{-1}A_{0}Z$ is Metzler\footnote{We say that a matrix is Metlzer when all its non-diagonal coefficients
+such that $Z^{-1}A_{0}Z$ is Metzler\footnote{We say that a matrix is Metzler when all its non-diagonal coefficients
 are non-negative.}.
 \end{assumption}
 In practice, this assumption is often verified. It is for instance
@@ -562,11 +537,8 @@ $Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2p\t
 such that the following linear matrix inequalities are satisfied:
 \begin{gather*}
 P+\min\{Z_{+},Z_{-}\}>0,\;\Upsilon\preceq0,\;\Gamma>0,\\
-Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
-\end{gather*}
-where
-\begin{gather*}
-\Upsilon=\left[\begin{array}{cccc}
+Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,\\
+\text{where }\quad \Upsilon=\left[\begin{array}{cccc}
 \Upsilon_{11} & \Upsilon_{12} & \Upsilon_{13} & P\\
 \Upsilon_{12}^{\top} & \Upsilon_{22} & \Upsilon_{23} & Z_{+}\\
 \Upsilon_{13}^{\top} & \Upsilon_{23}^{\top} & \Upsilon_{33} & -Z_{-}\\
@@ -579,7 +551,7 @@ P & Z_{+} & -Z_{-} & -\Gamma
 then \eqref{eq:closed-loop_pr} is input-to-state stable with respect
 to $\underline{\omega},\overline{\omega}$.
 \end{theorem}
-Note that the requirement that the matrix $P$ has to be diagonal is not
+Note that the requirement that $P$ has to be diagonal is not
 restrictive, since for a Metzler matrix $\cD_{0}$ (the case of \eqref{eq:predictor-naive}
 and \eqref{eq:interval-predictor}), its stability is equivalent to
 existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P\cD_{0}\prec0$
@@ -588,13 +560,13 @@ existence of a diagonal solution $P$ of the Lyapunov equation $\cD_{0}^{\top}P+P
 Consider a candidate Lyapunov function:
 \begin{gather*}
 V(\xi)=\xi^{\top}P\xi+\xi{}^{\top}Z_{+}\xi^{+}-\xi^{\top}Z_{-}\xi^{-}\\
-=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}\xi_{k}\xi_{k}^{+}-(Z_{-})_{k,k}\xi_{k}\xi_{k}^{-}\\
+%=\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}\xi_{k}\xi_{k}^{+}-(Z_{-})_{k,k}\xi_{k}\xi_{k}^{-}\\
 =\sum_{k=1}^{2p}P_{k,k}\xi_{k}^{2}+(Z_{+})_{k,k}|\xi_{k}|\xi_{k}^{+}+(Z_{-})_{k,k}|\xi_{k}|\xi_{k}^{-},
 \end{gather*}
 which is positive definite provided that
-\[
+$
 P+\min\{Z_{+},Z_{-}\}>0
-\]
+$
 since all terms in $V$ are quadratic-like, and whose derivative for
 the system \eqref{eq:closed-loop_pr} dynamics takes the form:
 \begin{gather*}
@@ -614,10 +586,9 @@ the system \eqref{eq:closed-loop_pr} dynamics takes the form:
 -2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta}.
 \end{gather*}
 Note that
-\begin{gather*}
-(\xi^{+})^{\top}\Psi\xi^{-}=0,\\
-(\xi^{+})^{\top}\Psi_{+}\xi\geq0,\;(-\xi^{-})^{\top}\Psi_{-}\xi\geq0
-\end{gather*}
+$
+(\xi^{+})^{\top}\Psi\xi^{-}=0,\;(\xi^{+})^{\top}\Psi_{+}\xi\geq0,\;(-\xi^{-})^{\top}\Psi_{-}\xi\geq0
+$
 for any diagonal matrix $\Psi$ and $\Psi_{+}\geq0$, $\Psi_{-}\geq0$.
 Hence, if $\Upsilon\preceq0$, as it is assumed in the theorem, we
 obtain that
@@ -626,13 +597,12 @@ obtain that
  &  & -2(\xi^{+})^{\top}\Psi_{+}\xi-2(-\xi^{-})^{\top}\Psi_{-}\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta}\\
  & \leq & -\xi^{\top}\Omega\xi+\tilde{\delta}^{\top}\Gamma\tilde{\delta},
 \end{eqnarray*}
-\[
-\text{where }\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
-\]
+where $\Omega=Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0
+$
 is a diagonal matrix. The substantiated properties of $V$ and its
 derivative imply that \eqref{eq:closed-loop_pr} is input-to-state
 stable \cite{Sontag:01:Springer,Dashkovskiy:11:AiT} with respect
-to the input $\tilde{\delta}$ (or, by its definition, with respect
+to the input $\tilde{\delta}$ (or, by its definition,
 to $(\underline{\omega},\overline{\omega})$).
 \end{proof}
 Following the proof of Theorem \ref{thm:ISS_pr}, for all $\xi\in\Real^{2p}$,
@@ -640,13 +610,13 @@ Following the proof of Theorem \ref{thm:ISS_pr}, for all $\xi\in\Real^{2p}$,
 \xi^{\top}(P+\min\{Z_{+},Z_{-}\})\xi\leq V(\xi)\leq\xi^{\top}(P+Z_{+}^{+}+Z_{-}^{+})\xi,
 \]
 then
-\[
+$
 \dot{V}\leq-\alpha V+\tilde{\delta}^{\top}\Gamma\tilde{\delta}
-\]
+$
 for all $\xi,\tilde{\delta}\in\Real^{2p}$, where
-\[
+$
 \alpha=\min_{i\in[2p]}\lambda_{i}\left(\Omega(P+Z_{+}^{+}+Z_{-}^{+})^{-1}\right),
-\]
+$
 and we can define the set (recall that the signal $\tilde{\delta}(t)$
 is known for all $t\geq0$)
 \begin{equation}
@@ -661,14 +631,11 @@ of linear matrix inequalities:
 If there exist diagonal matrices $P$, $\tilde{Q}$, $\tilde{Q}_{+}$,
 $\tilde{Q}_{-}$, $Z_{+}$, $Z_{-}$, $\tilde{\Psi}_{+}$, $\tilde{\Psi}_{-}$,
 $\tilde{\Psi}$, $\Gamma\in\Real^{2p\times2p}$ and matrices $U_{0},U_{1},U_{2}\in\Real^{q\times2p}$
-such that the following linear matrix inequalities are satisfied:
+satisfying following linear matrix inequalities:
 \begin{gather*}
 P>0,\;Z_{+}>0,\;Z_{-}>0,\;\Pi\preceq0,\;\Gamma>0,\\
-\tilde{Q}+\min\{\tilde{Q}_{+},\tilde{Q}_{-}\}+2\min\{\tilde{\Psi}_{+},\tilde{\Psi}_{-}\}>0,
-\end{gather*}
-where
-\begin{gather*}
-\Pi=\left[\begin{array}{cccc}
+\tilde{Q}+\min\{\tilde{Q}_{+},\tilde{Q}_{-}\}+2\min\{\tilde{\Psi}_{+},\tilde{\Psi}_{-}\}>0,\\
+\text{where }\quad \Pi=\left[\begin{array}{cccc}
 \Pi_{11} & \Pi_{12} & \Pi_{13} & I\\
 \Pi_{12}^{\top} & \Pi_{22} & \Pi_{23} & I\\
 \Pi_{13}^{\top} & \Pi_{23}^{\top} & \Pi_{33} & -I\\
@@ -717,31 +684,27 @@ more restrictive than the conditions of Theorem \ref{thm:ISS_pr},
 but it allows the gains $K_{0},K_{1},K_{2}$ to be efficiently calculated.
 
 Under conditions of Theorem \ref{thm:ISS_pr}, the control \eqref{eq:control_pr}
-ensures stabilization of the predictor \eqref{eq:predictor} (\emph{i.e}.,
-\eqref{eq:predictor-naive} or \eqref{eq:interval-predictor}) in
-a vicinity $\X_{f}$ of the origin. The size of the vicinity is proportional
+ensures stabilization of the predictor \eqref{eq:predictor} in
+a vicinity $\X_{f}$ of the origin whose size is proportional
 to the system \eqref{eq:dynamics} uncertainty (it can be optimized
-by the choice of $K_{0},K_{1},K_{2}$), and due to \eqref{eq:inclusion-generic},
-it implies that the system \eqref{eq:dynamics} also will reach a
-neighborhood of the origin under the control \eqref{eq:control_pr}.
-Hence, the posed control problem would be solved provided that \eqref{eq:constraints}
+by the choice of $K_{0},K_{1},K_{2}$). Due to \eqref{eq:inclusion-generic},
+the system \eqref{eq:dynamics} also will reach a
+neighborhood of the origin and the posed control problem would be solved provided that \eqref{eq:constraints}
 holds. In order to ensure the robust constraint satisfaction we
 consider an MPC design in the next section.
 
 \section{\label{sec:control} Robust Control}
 
 For brevity, the results of this section are given for the predictor
-\eqref{eq:interval-predictor} only (and the case of \eqref{eq:predictor-naive}
-can be considered by skipping Assumption \ref{assu:metzler} in the
-formulation). We need the following hypothesis in this section:
+\eqref{eq:interval-predictor} only. We need the following hypothesis:
 \begin{assumption}
 \label{assu:ctrl} There exist $K_{0},K_{1},K_{2}\in\Real^{q\times2p}$
 satisfying the conditions of Theorem \ref{thm:ISS_pr} for the matrices
 $A_{0}$ and $\Delta A_{i}$ with $i\in[2d]$ calculated in \eqref{eq:polytope}
 for $\hat{\Theta}(t)=\Theta$, and
-\[
+$
 \X_{f}\subset\X^{2},
-\]
+$
 where the corresponding set $\X_{f}$ is given in \eqref{eq:X_f},
 and
 \[
@@ -750,42 +713,34 @@ K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\U
 for any $\xi\in\X_{f}$ and $t\geq0$.
 \end{assumption}
 These properties guarantee that there exists a control \eqref{eq:control_pr}
-that can be always applied to stabilize the predictor \eqref{eq:interval-predictor}
-(the worst-case estimate set $\Theta$ is used to calculate the system
-matrices) and into the set $\X_{f}$ the restrictions \eqref{eq:constraints}
+that can be always applied to stabilize the predictor \eqref{eq:interval-predictor} and into the set $\X_{f}$ the restrictions \eqref{eq:constraints}
 also hold for such a control. Define $T>0$ and $\tau\in(0,T)$ as the interval of prediction and
-the application time for MPC, \emph{i.e}., at each $t\geq0$ to design
-input $u(t)$, an optimal control problem is solved on the interval
-$[t,t+T]$, and this optimal control problem is resolved again
-after $\tau$ units of time (on the interval $[t,t+\tau)$ the obtained
-optimal control is applied). Denote $t_{i}=i\tau$ for $i\in\Natural_{+}$,
-then the developed MPC algorithm can be formalized as follows for
-any $t_{i}\geq0$:
+the application time for MPC. %, \emph{i.e}., at each $t\geq0$ to design input $u(t)$, an optimal control problem is solved on the interval $[t,t+T]$, and this optimal control problem is resolved again after $\tau$ units of time (on the interval $[t,t+\tau)$ the obtained optimal control is applied). 
+Denote $t_{i}=i\tau$ for $i\in\Natural_{+}$, then the developed MPC algorithm can be formalized as:
 \begin{enumerate}
 \item Take $\hat{\Theta}(t_{i})$ from \eqref{eq:set_LS} and calculate
 the matrices $A_{0}$ and $\Delta A_{i}$ with $i\in[2d]$ for \eqref{eq:polytope}.
-\item Find
+\item Find, given weights $W_{i}\succeq0$ in $\Real^{2p\times2p}$, the controls
 \begin{gather}
-\cU=\text{argmin}_{u:[t_{i},t_{i}+T]\to\Real^{q}}\xi^{\top}(t_{i}+T)W_{1}\xi(t_{i}+T)\label{eq:OCP}\\
-+\int_{t_{i}}^{t_{i}+T}\xi^{\top}(s)W_{2}\xi(s)+u^{\top}(s)W_{3}u(s)ds,\nonumber 
+\cU=\text{argmin}_{u:[t_{i},t_{i}+T]\to\Real^{q}}\xi^{\top}(t_{i}+T)W_{1}\xi(t_{i}+T)\nonumber\\
++\int_{t_{i}}^{t_{i}+T}\xi^{\top}(s)W_{2}\xi(s)+u^{\top}(s)W_{3}u(s)ds,\label{eq:OCP}
 \end{gather}
-where $W_{i}\in\Real^{2p\times2p}$ are given positive definite symmetric
-matrices, such that the following constraints are satisfied: 
+such that the following constraints are satisfied: 
 \begin{enumerate}
 \item $\xi:[t_{i},t_{i}+T]\to\Real^{2p}$ is a solution of \eqref{eq:interval-predictor}
-with $t=t_{i}$ and additionally (to counteract the influence of big
-measurement perturbations)
-\begin{align}
-[\underline{x}&(t_{i}),\overline{x}(t_{i})]=\label{eq:update}\\
-&\begin{cases}
-[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i=0\\
-\quad\cap[\underline{x}_{0},\overline{x}_{0}];\\{}
-[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i\geq1\\
-\quad\cap[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)],
-\end{cases}\nonumber
-\end{align}
-where $(\underline{x}^{\top}(t_{i-1}+\tau),\overline{x}^{\top}(t_{i-1}+\tau))^{\top}=\xi(t_{i-1}+\tau)$
-is obtained during the prediction on the previous iteration.
+%with $t=t_{i}$ 
+%and additionally (to counteract the influence of big measurement perturbations)
+%\begin{align}
+%[\underline{x}&(t_{i}),\overline{x}(t_{i})]=\label{eq:update}\\
+%&\begin{cases}
+%[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i=0\\
+%\quad\cap[\underline{x}_{0},\overline{x}_{0}];\\{}
+%[y_{1}(t_{i})-\underline{\nu}_{1}(t_{i}),y_{1}(t_{i})+\overline{\nu}_{1}(t_{i})] & i\geq1\\
+%\quad\cap[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)],
+%\end{cases}\nonumber
+%\end{align}
+%where $(\underline{x}^{\top}(t_{i-1}+\tau),\overline{x}^{\top}(t_{i-1}+\tau))^{\top}=\xi(t_{i-1}+\tau)$
+%is obtained during the prediction on the previous iteration.
 \item $\xi(s)\in\X^{2}$ and $u(s)\in\U$ for $s\in[t_{i},t_{i}+T]$; 
 \item $\xi(t_{i}+T)\in\X_{f}$.
 \end{enumerate}
@@ -844,24 +799,23 @@ Recall that $\theta\in\hat{\Theta}(t)$ for all $t\geq0$ due to the
 result of Proposition \ref{prop:LS}, and the size of the set $\hat{\Theta}(t)$
 is not growing with time by definition of \eqref{eq:set_LS}.
 
-Note that if for some $t_{k}\geq0$ the initial conditions $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\X_{f}\subset\X^{2}$,
+\emph{1)} Note that if for some $t_{k}\geq0$ the initial conditions $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\X_{f}\subset\X^{2}$,
 then the control \eqref{eq:control} equals to \eqref{eq:control_pr}.
 According to the definition \eqref{eq:X_f} of $\X_{f}$ and Assumption
 \ref{assu:ctrl}, $\xi(t)\in\X_{f}$ and $u(t)\in\U$ for all $t\geq t_{k}$,
 and the system is input-to-state stable with respect to $\xi(t)=[\underline{x}^{\top}(t)\;\overline{x}^{\top}(t)]^{\top}$
 due to the result of Theorem \ref{thm:ISS_pr}. Since $|x(t)|\leq|\xi(t)|$
 under \eqref{eq:inclusion-generic} for $t\geq t_{k}$ and $|\xi(t_{k})|\leq|x(t_{k})|+\zeta$
-with $\zeta>0$ (that is well defined for all initial conditions in
-$\X_{f}$), the practical input-to-state stability for the variable
-$x(t)$ follows. The point \emph{1)} is proven.
+with $\zeta>0$ %(that is well defined for all initial conditions in $\X_{f}$)
+, the practical input-to-state stability for the variable
 
-Now, let $(\underline{x}^{\top}(0),\overline{x}^{\top}(0))^{\top}\in\X^{2}\setminus\X_{f}$
+\emph{2)} Now, let $(\underline{x}^{\top}(0),\overline{x}^{\top}(0))^{\top}\in\X^{2}\setminus\X_{f}$
 and assume that there is a solution of the optimal control problem
 \eqref{eq:OCP}. Applying such a control through \eqref{eq:control}
 for $t\in[0,\tau)$, we have that $\xi(t)\in\X$ and $u(t)\in\U$
 on this time interval. At $t=t_{1}=\tau$, if again $(\underline{x}^{\top}(t_{1}),\overline{x}^{\top}(t_{1}))^{\top}\in\X^{2}\setminus\X_{f}$
-(where $\underline{x}(t_{1}),\overline{x}(t_{1})$ are calculated
-as in \eqref{eq:update}), then it recursively exists a solution to
+%(where $\underline{x}(t_{1}),\overline{x}(t_{1})$ are calculated as in \eqref{eq:update})
+, then it recursively exists a solution to
 \eqref{eq:OCP} since the set $\hat{\Theta}(t)$ is shrinking by its
 design and the signals $\overline{\omega}(t),\overline{\omega}(t)-\underline{\omega}(t)$
 are non-increasing by hypotheses of the theorem (\emph{i.e}., the
@@ -875,45 +829,38 @@ in \eqref{eq:OCP} (provided that the optimal control $\cU$ is applied)
 and $[\underline{x}(t_{i}),\overline{x}(t_{i})]\subset[\underline{x}(t_{i-1}+\tau),\overline{x}(t_{i-1}+\tau)]$
 for all $i\geq1$, there is a finite time instant $t_{k}\geq T$ such
 that $(\underline{x}^{\top}(t_{k}),\overline{x}^{\top}(t_{k}))^{\top}\in\X_{f}$,
-and the system further stays there. The point \emph{2)} is substantiated.
+and the system further stays there.
 
-The point \emph{3)} is a consequence of the previous analysis: under
+\emph{3)} is a consequence of the previous analysis: under
 the control \eqref{eq:control} the constrains \eqref{eq:constraints}
 are always satisfied.
 \end{proof}
-\begin{remark}
-At each $t_{i}$, $i\in\Natural_{+}$, the gains $K_{0},K_{1},K_{2}$
-can be recalculated for the currently estimated set $\hat{\Theta}(t_{i})$.
-If next, the obtained in \eqref{eq:X_f} set $\X_{f}$ satisfies 
-$
-\X_{f}\subset\X^{2},
-$
-and
-$
-K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\U
-$
-for any $\xi\in\X_{f}$ and $t\geq0$, as in Assumption \ref{assu:ctrl},
-then the new set $\X_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
-can be used in \eqref{eq:control}.
-\end{remark}
-
-We illustrate the efficiency of the proposed MPC approach by numerical
-experiments.
+%\begin{remark}
+%At each $t_{i}$, $i\in\Natural_{+}$, the gains $K_{0},K_{1},K_{2}$
+%can be recalculated for the currently estimated set $\hat{\Theta}(t_{i})$.
+%If next, the obtained in \eqref{eq:X_f} set $\X_{f}$ satisfies 
+%$
+%\X_{f}\subset\X^{2},
+%$
+%and
+%$
+%K_{0}\xi+K_{1}\xi^{+}+K_{2}\xi^{-}+S\delta(t)\in\U
+%$
+%for any $\xi\in\X_{f}$ and $t\geq0$, as in Assumption \ref{assu:ctrl},
+%then the new set $\X_{f}$ and these updated gains $K_{0},K_{1},K_{2}$
+%can be used in \eqref{eq:control}.
+%\end{remark}
 
 \section{\label{sec:experiments} Numerical experiment}
 
-We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, its yaw angle $\psi$, its velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, its moment of inertia as $I_z$, and its front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation}: the vehicle is moving at constant longitudinal speed $u$, and the lateral force $F_y$ of a tire with slip angle $\alpha$ is assumed to be linear with an unknown friction coefficient $C_\alpha$: $F_y = C_\alpha \alpha$. The slip angle of the front and rear tires are respectively denoted as $\alpha_f, \alpha_r$, along with the corresponding friction coefficients.
-Under a small angle approximation for $\psi, \alpha_f, \alpha_r$, Newton's second law of motion yields the linear dynamics \eqref{eq:dynamics} with:
+We tackle the problem of the robust adaptive lateral control of an autonomous vehicle with unknown tire friction, for a lane-keeping application. We represent the state of a rigid vehicle by its position $(p_x, p_y)$, angle $\psi$, velocity $(v_x, v_y)$ in the body frame and yaw rate $r$. We denote its mass as $m$, moment of inertia as $I_z$, and front and rear axle positions as $a,b$. We consider the Dynamical Bicycle Model described in Chapter 3.2 of \cite{awan2014compensation} parametrised by the unknown front and rear tire friction coefficients $\theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp$, which yields the linear dynamics \eqref{eq:dynamics} with 
 % \begin{align*}
 % \dot{v_y} &= \frac{-2(C_{\alpha_f} + C_{\alpha_r})}{m v_x} v_y + \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{m v_x} r - v_x r + \frac{2}{m}u, \\
 % \dot{r} &= \frac{2(C_{\alpha_r}b - C_{\alpha_f}a)}{I_z v_x} v_y + \frac{-2(C_{\alpha_f}a^2 + C_{\alpha_r}b^2)}{I_z v_x} r + \frac{a}{I_z} u.
 % \end{align*}
 % We can rewrite them as :
-\begin{align*}
-x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\transp,\quad
-\theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp,
-\end{align*}
 \[
+x = \begin{bmatrix} {p_y} \\ {\psi} \\ {v_y} \\ {r} \end{bmatrix},\quad
 A = \begin{bmatrix}
 0 & v_x & 1 & 0 \\
 0 & 0 & 0 & 1 \\
@@ -928,28 +875,22 @@ B =
 \frac{a}{I_z}
 \end{bmatrix},
 \]
-
 \[
-\phi_1 = \frac{-2}{m v_x I_z}\begin{bmatrix}
+\phi = \frac{-2}{m v_x I_z}\left[\begin{bmatrix}
 0 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 \\
 0 & 0 & I_z & a I_z \\
 0 & 0 & a m & a^2 m \\
-\end{bmatrix},
-\]
-
-\[
-\phi_2 = \frac{-2}{m v_x I_z}\begin{bmatrix}
+\end{bmatrix},\begin{bmatrix}
 0 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 \\
 0 & 0 & I_z & -b I_z \\
 0 & 0 & - bm & b^2 m \\
-\end{bmatrix}.
+\end{bmatrix}\right].
 \]
-
 Instead of simply stabilizing the vehicle state $x$, we track the lateral position $y_r(t)$ of the lane center. However, we do not have access to a full state reference $x_r(t) = [y_r(t), \psi_r(t), v_{y,r}(t), r_r(t)]^\transp$ consistent with the dynamics \eqref{eq:dynamics}. Thus, we define the state $\tilde{x} = x - [y_r(t), 0, 0, 0]^\transp$ and consider the remaining unknown terms $[0, \psi_r(t), v_{y,r}(t), r_r(t)]$ and $u_r(t)$ as perturbations $\omega(t)$, bounded since $x_r,\,u_r$ are assumed to belong to $\X = \pm[3, 2, 6, 6]^\transp$ and $\U=\pm[10]$.
 
-The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based MPC scheme \cite{HomemDeMello2014} to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation. A video is available at this url: \url{https://drive.google.com/file/d/18I6lPgAjS8buMB09OCF6WcHtHzUr_ql_/}.
+The \Cref{fig:lane-keeping} depicts our approach. The confidence region $\hat{\Theta}(t)$ from \eqref{eq:set_LS} is shown in the top graph, and shrinks with time. To simplify verification of \Cref{assu:metzler} for this example, an auxiliary preliminary feedback has been applied shifting the eigenvalues of the closed-loop system. The robust stability of this feedback is assessed with the LMI of \Cref{thm:ISS_pr}, and we compute the corresponding basin of attraction $X_f$ from \eqref{eq:X_f}, represented in green in the bottom subfigure. Then, we use a sampling-based MPC scheme \cite{HomemDeMello2014} to solve \eqref{eq:LS} and bring $\xi(t)$ into $X_f$ in $T=3s$.  The associated interval prediction $\xi(t)$ from \eqref{eq:predictor} is represented with a color gradient from $t=t_i$ (red) to $t=t_i+T$ (green). Once the vehicles enters $X_f$, we finally switch to the closed-loop feedback \eqref{eq:control_pr} following \eqref{eq:control} for the rest of the simulation. A video is available at \href{https://drive.google.com/file/d/18I6lPgAjS8buMB09OCF6WcHtHzUr\_ql\_/}{this url}.
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{img/lane-keeping.png}
