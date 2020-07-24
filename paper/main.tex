@@ -119,7 +119,7 @@ evaluation of all possible plant trajectories in the presence of external
 perturbations and noises. 
 
 In the present work, our goal is to develop a simple solution that
-allow the system comportment to be evaluated for given model uncertainty
+allows the system comportment to be evaluated for given model uncertainty
 with adjustments provided by estimation algorithms. Such a solution
 is based on interval predictors proposed recently \cite{Efimov2012,leurent2019interval},
 whose use will provide to a slightly nonlinear MPC algorithm an ability
@@ -425,8 +425,7 @@ for all $\theta\in\hat{\Theta}(t)$ and some $\underline{A},\overline{A}\in\Real^
 A(\theta)\in\left\{ A_{0}+\sum_{i=1}^{2^{d}}\alpha_{i}\Delta A_{i}:\alpha_{i}\geq0,\sum_{i=1}^{2^{d}}\alpha_{i}=1\right\} \label{eq:polytope}
 \end{equation}
 for all $\theta\in\hat{\Theta}(t)$, where $A_{0}=A(\hat{\theta}(t))$
-and $\Delta A_{i}=h_{i}\Delta\theta(X)$ for $h_{i}\in\{-1,1\}^{d}$
-with $i\in[2d]$.
+and $\Delta A_{i}=A(\hat{\theta}(t) + h_{i}\Delta\theta(X))-A_0$ for $h_{i}\in\{-1,1\}^{d},\,i\in[2^d]$.
 \end{itemize}
 The matrices $\underline{A},\overline{A}$ can be calculated using
 the interval arithmetic for given set $\hat{\Theta}(t)$; suggestions
