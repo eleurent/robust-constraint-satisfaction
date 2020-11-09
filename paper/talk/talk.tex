@@ -1,0 +1,233 @@
+\documentclass[slideopt,A4,showboxes,svgnames]{beamer}
+
+%% list of packages here
+\usepackage[absolute,showboxes,overlay]{textpos}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{array, makecell}
+\usepackage{blkarray}
+\usepackage{nccmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage[backend=biber, style=authoryear]{biblatex}
+\renewcommand*{\nameyeardelim}{\addcomma\addspace}
+\addbibresource{../references.bib}
+
+\usepackage{theme/beamerthemeinria}
+%\input{../mathdef}
+\input{./mathdef}
+\input{theme/style}
+
+\title[Robust-Adaptive Control]{Robust-Adaptive\\Interval Predictive Control\\ for Linear Uncertain Systems}
+\subtitle{Sous-titre}
+\date[date]{date}
+\author[Edouard Leurent]{\textbf{Edouard Leurent}\inst{1,2},\\
+	Odalric-Ambrym Maillard\inst{1},\\
+	Denis Efimov\inst{1}}
+\institute{
+	\inst{1} Univ. Lille, Inria, CNRS, \\ ~Centrale Lille, UMR 9189 – CRIStAL,\\
+	\inst{2} Renault Group}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Motivation}
+
+
+Real-world systems face a severe model uncertainty
+under strict state and control constraints, whose maintaining is critical and related with the system safety
+
+\end{frame}
+
+\begin{frame}{Setting}
+\begin{exampleblock}{Objective}
+\begin{itemize}
+	\item Stabilization of a linear system \useshortskip
+	\begin{align*}
+	{\dot{x}(t)} &= \textcolor<4>{orange}{A(\theta)}{x(t)} + B u(t) + \textcolor<2-4>{normalBlockTitleTextColor}{\omega(t)},
+	\end{align*}
+	\item Constraints on state $x\in\X$, control $u\in\U$.
+\end{itemize}
+\end{exampleblock}
+\pause
+\begin{alertblock}{Subject to uncertainty}
+	\begin{itemize}[<+->]
+		\item Bounded disturbance ${\red \underline\omega(t) \leq \omega(t) \leq \overline\omega(t)}$;
+		\item Bounded measurement noise ${\red \underline\eta(t) \leq \eta(t) \leq \overline\eta(t)}$,
+		\useshortskip
+		\begin{equation*} y(t) = \begin{bmatrix}x(t) & \dot x(t)\end{bmatrix}^\top + {\red \eta(t)};\end{equation*}
+		\item Parametric uncertainty in the state matrix \useshortskip
+	\begin{align*}
+	{\orange A(\theta)} = A + \sum_{i=1}^d {\orange \theta_i}\phi_i\text{ is unknown.}
+	\end{align*}
+	\end{itemize}\vspace*{-0.5cm}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Related work}
+
+\begin{alertblock}{Adaptive Model Predictive Control (MPC)}
+	See \textit{e.g.} [\cite{Fukushima2007,Adetola2009,Adetola2011,Aswani2013,Vicente2019}]
+	\pause
+	\begin{enumerate}[<+->]
+		\item Estimation algorithm to evaluate the model uncertainty
+		\item MPC to enforce constraints during transients
+	\end{enumerate}
+\end{alertblock}
+\pause[\thebeamerpauses]
+\begin{exampleblock}{Our work}
+	\begin{itemize}
+		\item A simple solution using \alert{intervals},
+		\item based on a \alert{recent predictor} [\cite{leurent2019interval}]
+	\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Step 1: Model Estimation}
+\begin{assumption}[Persistence of Excitation (PE)]
+	\label{assu:PE}
+	The features $\Phi(t)=[\phi_{1}y_{1}(t)\dots\phi_{d}y_{1}(t)]\in\Real^{p\times d}$ verify
+	\[\forall t\geq 0,\;
+	\int_{t}^{t+\ell}\Phi^{\top}(s)\Phi(s)ds\ge\vartheta I_{d}.
+	\]
+\end{assumption}
+\pause
+Define \begin{equation*}
+\hat{\theta}(t)=
+\left(\int_{0}^{t}\Phi^{\top}(s)\Phi(s)ds\right)^{-1}\int_{0}^{t}\Phi^{\top}(s)y(s)ds,\, t\geq\ell,
+\end{equation*}
+\pause
+\begin{proposition}[Admissible values $\hat{\Theta}(t)\subseteq\Theta$]
+%For all $t\geq\ell$,
+%	$
+%	|\hat{\theta}(t)-\theta|\leq\Delta\theta(\Vert x\Vert_{\infty})
+%	$
+	\begin{equation*}
+	\theta \in {\orange \hat{\Theta}(t)}=\Theta\bigcap_{\tau\in[\ell,t]}\{\tilde{\theta}\in\Real^{d}:|\hat{\theta}(\tau)-\tilde{\theta}|\leq\Delta\theta(X)\}.\label{eq:set_LS}
+	\end{equation*}
+\end{proposition}
+\end{frame}
+
+\begin{frame}{Step 2: State Prediction}
+Given $\orange \hat{\Theta}(t)$, ${\red \underline\omega(s) \leq \omega(s) \leq \overline\omega(s)}$, ${\red \underline\eta(s) \leq \eta(s) \leq \overline\eta(s)}$, we want: 
+\begin{equation*}
+{\blue \ux(s)}\leq x(s)\leq{\blue \ox(s)},\quad\forall s\geq t.
+\end{equation*}
+
+\begin{center}
+\includegraphics[width=0.35\linewidth]{img/interval-hull}
+\end{center}
+\begin{itemize}
+	\item[\incarrow] To derive this predictor, two possible \alert{representations of the uncertainty} over $A(\theta)$ can be used.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 2: Interval Uncertainty}
+For all $\theta\in\hat{\Theta}(t)$,
+{\orange$\quad\underline{A}\leq A(\theta)\leq\overline{A}
+$}.
+\begin{proposition}[Simple predictor of \cite{Efimov2012}]
+{\small
+\begin{align*}
+{\blue \dot{\underline{x}}(s)} & = {\orange \underline{A}^{+}}\underline{x}^{+}(s)-{\orange\overline{A}^{+}}\underline{x}^{-}(s)-{\orange\underline{A}^{-}}\overline{x}^{+}(s)+{\orange\overline{A}^{-}}\overline{x}^{-}(s) +Bu(s)+\underline{\omega}(s),\\
+{\blue \dot{\overline{x}}(s)} & = {\orange \overline{A}^{+}}\overline{x}^{+}(s)-{\orange\underline{A}^{+}}\overline{x}^{-}(s)-{\orange\overline{A}^{-}}\underline{x}^{+}(s)+{\orange\underline{A}^{-}}\underline{x}^{-}(s)
++Bu(s)+\overline{\omega}(s), \\
+&  \underline{x}(t)=y_{1}(t)-\underline{\nu}_{1}(t),\;\overline{x}(t)=y_{1}(t)+\overline{\nu}_{1}(t), 
+\end{align*}
+}
+ensures the inclusion property.
+\end{proposition}
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/observer}
+	\vspace*{-1cm}
+\end{center}
+\end{frame}
+
+\begin{frame}{Step 2: Polytopic Uncertainty} $\forall\theta\in\hat{\Theta}(t)$, ${\orange A(\theta)}\in\left\{ {\orange A_{0}+\sum_{i=1}^{2^{d}}\alpha_{i}\Delta A_{i}}:\alpha_{i}\geq0,\sum_{i=1}^{2^{d}}\alpha_{i}=1\right\}$
+\begin{proposition}[Enhanced predictor of \cite{leurent2019interval}]
+	{\small
+	\begin{align*}
+{\blue \dot{\underline{x}}(s)} & = {\orange A_{0}}\underline{x}(s)-{\orange \Delta A_{+}}\underline{x}^{-}(s)-{\orange \Delta A_{-}}\overline{x}^{+}(s)
++Bu(s)+\underline{\omega}(s) \\
+{\blue \dot{\overline{x}}(s)} & = {\orange A_{0}}\overline{x}(s)+{\orange \Delta A_{+}}\overline{x}^{+}(s)+{\orange \Delta A_{-}}\underline{x}^{-}(s)\label{eq:interval-predictor}
++Bu(s)+\overline{\omega}(s) \\
+& \underline{x}(t)=y_{1}(t)-\underline{\nu}_{1}(t),\;\overline{x}(t)=y_{1}(t)+\overline{\nu}_{1}(t),\nonumber 
+	\end{align*}}
+	ensures the inclusion property.
+\end{proposition}
+\begin{center}
+\includegraphics[width=0.6\linewidth]{img/predictor}
+\vspace*{-1cm}
+\end{center}
+\end{frame}
+
+\begin{frame}{Step 3: Robust Stabilization}
+%Now that we have 
+%$
+%{\blue \ux(s)}\leq x(s)\leq{\blue \ox(s)},\quad\forall s\geq t,
+%$
+
+We want to \alert{stabilize} $$ {\blue \xi(t) = \begin{bmatrix}\underline{x}(t) \\ \overline{x}(t)\end{bmatrix}}$$
+
+
+%
+%Its dynamics can be written as \begin{equation}
+%\dot{\xi}(t)=\cA_{0}\xi (t)+\cA_{1}\xi^{+}(t)+\cA_{2}\xi^{-}(t)+\cB u(t)+\delta(t),
+%\end{equation}
+%with $\delta(t)=\begin{bmatrix}
+%\underline{\omega}(t) & \overline{\omega}(t)
+%\end{bmatrix}^\top\in\Real^{2p}
+%$
+\begin{exampleblock}{Controller design}
+We propose to look for a control in the form
+\begin{equation*}
+u(t)=K_{0}{\blue \xi(t)}+K_{1}{\blue \xi^{+}(t)}+K_{2}{\blue \xi^{-}(t)}+S{\red \begin{bmatrix}\underline{\omega}(t) & \overline{\omega}(t)\end{bmatrix}}^\top
+\end{equation*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Step 3: Robust Stabilization}
+Denote the closed-loop state matrices ${\green \cD_{i}}=\cA_{i}+\cB {\green K_{i}}$ for $i\in[3]$.
+
+The gains $K_{0},K_{1},K_{2}$ have to respect the following restriction:
+\begin{theorem}[ISS Stability]
+	
+	If there exist diagonal matrices $P$, $Q$, $Q_{+}$,
+	$Q_{-}$, $Z_{+}$, $Z_{-}$, $\Psi_{+}$, $\Psi_{-}$, $\Psi$, $\Gamma\in\Real^{2p\times2p}$
+	such that:
+	\scriptsize
+	\begin{gather*}
+	{\green \Upsilon\preceq0},\;P+\min\{Z_{+},Z_{-}\}>0,\;\Gamma>0,\\
+	Q+\min\{Q_{+},Q_{-}\}+2\min\{\Psi_{+},\Psi_{-}\}>0,
+	\end{gather*}
+	\vspace*{-0.8cm}\tiny \begin{gather*}
+	\text{where }\quad {\green \Upsilon}=\left[\begin{array}{cccc}
+	\Upsilon_{11} & \Upsilon_{12} & \Upsilon_{13} & P\\
+	\Upsilon_{12}^{\top} & \Upsilon_{22} & \Upsilon_{23} & Z_{+}\\
+	\Upsilon_{13}^{\top} & \Upsilon_{23}^{\top} & \Upsilon_{33} & -Z_{-}\\
+	P & Z_{+} & -Z_{-} & -\Gamma
+	\end{array}\right], \\
+	\Upsilon_{11}=\cD_{0}^{\top}P+P\cD_{0}+Q,\;\Upsilon_{12}=\cD_{0}^{\top}Z_{+}+P\cD_{1}+\Psi_{+},\\
+	\Upsilon_{13}=P\cD_{2}-\cD_{0}^{\top}Z_{-}-\Psi_{-},\;\Upsilon_{22}=Z_{+}\cD_{1}+\cD_{1}^{\top}Z_{+}+Q_{+},\\
+	\Upsilon_{23}=Z_{+}\cD_{2}-\cD_{1}^{\top}Z_{-}+\Psi,\;\Upsilon_{33}=-Z_{-}\cD_{2}-\cD_{2}^{\top}Z_{-}+Q_{-},
+	\end{gather*}
+	\normalsize
+	then ${\blue \xi(t)}$ is \alert{input-to-state stable} with respect
+	to ${\red \underline{\omega},\overline{\omega}}$.
+\end{theorem}
+\end{frame}
+
+\begin{frame}
+\centering \LARGE Thank You!\\[1cm]
+\large \emph{I am looking for a postdoctoral position.}
+\end{frame}
+
+
+\end{document}
