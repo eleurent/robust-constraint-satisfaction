@@ -313,7 +313,7 @@ Autonomous vehicle with {\orange unknown tire friction}
 	\item \textbf{State}: \useshortskip $$x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\top $$
 	\item \textbf{Dynamics}: Dynamical Bicycle Model [\cite{awan2014compensation}] with unknown tire friction coefficients ${\orange \theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp}$
 	\useshortskip \[
-	\small
+	\scriptsize
 	A = \begin{bmatrix}
 	0 & v_x & 1 & 0 \\
 	0 & 0 & 0 & 1 \\
@@ -342,11 +342,12 @@ Autonomous vehicle with {\orange unknown tire friction}
 	\end{bmatrix}\right].
 	\]
 \end{itemize}
-
 \end{frame}
 
 \begin{frame}
-In this video, we show the predicted state intervals used to derive an open-loop transient control sequence, which robustly brings the system in a vicinity of the lane centreline. Once this region is reached, we switch to closed-loop control to robustly stabilize the system.
+\begin{center}
+	\href{https://youtu.be/axurBzHRLGY}{\includegraphics[width=0.8\linewidth]{img/lateral_control}}
+\end{center}
 \end{frame}
 
 \begin{frame}
