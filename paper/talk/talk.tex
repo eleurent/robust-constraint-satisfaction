@@ -186,17 +186,16 @@ We want to \alert{stabilize} $$ {\blue \xi(t) = \begin{bmatrix}\underline{x}(t) 
 %\end{bmatrix}^\top\in\Real^{2p}
 %$
 \begin{exampleblock}{Controller design}
-We propose to look for a control in the form
+We propose to look for a {\green control} in the form
 \begin{equation*}
-u(t)=K_{0}{\blue \xi(t)}+K_{1}{\blue \xi^{+}(t)}+K_{2}{\blue \xi^{-}(t)}+S{\red \begin{bmatrix}\underline{\omega}(t) & \overline{\omega}(t)\end{bmatrix}}^\top
+u(t)={\green K_{0}}{\blue \xi(t)}+{\green K_{1}}{\blue \xi^{+}(t)}+{\green K_{2}}{\blue \xi^{-}(t)}+ {\green S}{\red \begin{bmatrix}\underline{\omega}(t) & \overline{\omega}(t)\end{bmatrix}}^\top
 \end{equation*}
 \end{exampleblock}
 \end{frame}
 
 \begin{frame}{Step 3: Robust Stabilization}
-Denote the closed-loop state matrices ${\green \cD_{i}}=\cA_{i}+\cB {\green K_{i}}$ for $i\in[3]$.
 
-The gains $K_{0},K_{1},K_{2}$ have to respect the following restriction:
+The gains ${\green K_{0},K_{1},K_{2}}$ have to respect the following restriction:
 \begin{theorem}[ISS Stability]
 	
 	If there exist diagonal matrices $P$, $Q$, $Q_{+}$,
@@ -216,12 +215,119 @@ The gains $K_{0},K_{1},K_{2}$ have to respect the following restriction:
 	\end{array}\right], \\
 	\Upsilon_{11}=\cD_{0}^{\top}P+P\cD_{0}+Q,\;\Upsilon_{12}=\cD_{0}^{\top}Z_{+}+P\cD_{1}+\Psi_{+},\\
 	\Upsilon_{13}=P\cD_{2}-\cD_{0}^{\top}Z_{-}-\Psi_{-},\;\Upsilon_{22}=Z_{+}\cD_{1}+\cD_{1}^{\top}Z_{+}+Q_{+},\\
-	\Upsilon_{23}=Z_{+}\cD_{2}-\cD_{1}^{\top}Z_{-}+\Psi,\;\Upsilon_{33}=-Z_{-}\cD_{2}-\cD_{2}^{\top}Z_{-}+Q_{-},
+	\Upsilon_{23}=Z_{+}\cD_{2}-\cD_{1}^{\top}Z_{-}+\Psi,\;\Upsilon_{33}=-Z_{-}\cD_{2}-\cD_{2}^{\top}Z_{-}+Q_{-},\\
+	{\cD_{i}}=\cA_{i}+\cB {\green K_{i}},\;i\in[3]
 	\end{gather*}
 	\normalsize
 	then ${\blue \xi(t)}$ is \alert{input-to-state stable} with respect
 	to ${\red \underline{\omega},\overline{\omega}}$.
 \end{theorem}
+\end{frame}
+
+\begin{frame}{Are we done?}
+\begin{exampleblock}{Basin of attraction}
+All trajectories are asymptotically attracted into \useshortskip
+\begin{equation*}
+\X_{f}=\left\{\xi\in\Real^{2p}:V({\blue\xi})\leq\alpha^{-1}\sup_{t\geq0}|{\red \tilde{\delta}^{\top}(t)}\Gamma{\red \tilde{\delta}(t)}|\right\}
+\end{equation*}
+\end{exampleblock}
+
+\pause
+\begin{alertblock}{But...}
+	Constraints $x\in\X,\,u\in\U$ are not enforced.
+\end{alertblock}
+
+\begin{exampleblock}{Idea}
+	\begin{enumerate}
+		\item Assume the constraints hold asymptotically: $$\X_{f}\subset\X^{2}\text{  and  }u(\X_f) \subset\U$$
+		\item Find an open-loop control to reach $X_f$ under the constraints $x\in\X,\,u\in\U$.
+	\end{enumerate}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Step 4: Robust Constraint Satisfaction}
+
+\begin{enumerate}[<+->]
+	\item Find the controls
+	\begin{gather*}
+	\cU=\argmin_{u:[t_{i},t_{i}+T]\to\Real^{q}} 	\int_{t_{i}}^{t_{i}+T}\xi^{\top}(s)W_{1}\xi(s)+u^{\top}(s)W_{2}u(s)ds
+	\end{gather*}
+	subject to: 
+	\begin{itemize}
+		\item $\xi(s)\in\X^{2}$ and $u(s)\in\U$;
+		\item $\xi(t_{i}+T)\in\X_{f}$.
+	\end{itemize}
+	\item For $t\in[t_{i},t_{i}+\tau)$ select
+	\begin{equation*}
+	u(t)=\begin{cases}
+	\cU(t) & \xi(t_{i})\notin\X_{f}\\
+	{\green K_{0}}{\blue \xi(t)}+{\green K_{1}}{\blue \xi^{+}(t)}+{\green K_{2}}{\blue \xi^{-}(t)}+ {\green S}{\red \delta(t)} & \xi(t_{i})\in\X_{f}
+	\end{cases},\label{eq:control}
+	\end{equation*}
+	where $K_{0},K_{1},K_{2}$ are solutions of the stability LMI.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Step 4: Robust Constraint Satisfaction}
+\begin{theorem}[Main result]
+	\label{th:MPC} Under the previous assumptions, the closed-loop
+	system given by \begin{itemize}
+		\item the {system dynamics},
+		\item the {interval predictor},
+		\item the {interval feedback},
+		\item the {robust MPC}
+	\end{itemize}
+	has the following properties:
+	\begin{enumerate}[<+->]
+		\item \alert{Input-to-state stability} for ${\blue \underline{x},\;\overline{x}}$ and practical
+		input-to-state stability for $x$ with respect to ${\red \underline{\omega},\overline{\omega}}$
+		in the terminal set $\X_{f}$; 
+		\item \alert{Recursive feasibility} with reaching $\X_{f}$ in a finite time; 
+		\item \alert{Constraint satisfaction}.
+	\end{enumerate}
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Numerical Experiment}
+Autonomous vehicle with {\orange unknown tire friction}
+\begin{itemize}
+	\item \textbf{State}: $$x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\top $$
+	\item \textbf{Dynamics}: Dynamical Bicycle Model [\cite{awan2014compensation}] with unknown tire friction coefficients ${\orange \theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp}$
+	\[
+	\small
+	A = \begin{bmatrix}
+	0 & v_x & 1 & 0 \\
+	0 & 0 & 0 & 1 \\
+	0 & 0 & 0 & - v_x \\
+	0 & 0 & 0 & 0
+	\end{bmatrix},\quad
+	B =
+	\begin{bmatrix}
+	0 \\
+	0 \\
+	\frac{2}{m} \\
+	\frac{a}{I_z}
+	\end{bmatrix},
+	\]
+	\[
+	\phi = \frac{-2}{m v_x I_z}\left[\begin{bmatrix}
+	0 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 \\
+	0 & 0 & I_z & a I_z \\
+	0 & 0 & a m & a^2 m \\
+	\end{bmatrix},\begin{bmatrix}
+	0 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 \\
+	0 & 0 & I_z & -b I_z \\
+	0 & 0 & - bm & b^2 m \\
+	\end{bmatrix}\right].
+	\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+In this video, we show the predicted state intervals used to derive an open-loop transient control sequence, which robustly brings the system in a vicinity of the lane centreline. Once this region is reached, we switch to closed-loop control to robustly stabilize the system.
 \end{frame}
 
 \begin{frame}
