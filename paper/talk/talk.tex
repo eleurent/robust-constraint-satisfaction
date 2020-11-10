@@ -13,7 +13,7 @@
 \usepackage{blkarray}
 \usepackage{nccmath}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
-\usepackage[backend=biber, style=authoryear]{biblatex}
+\usepackage[backend=biber, style=authoryear-icomp,maxbibnames=9,maxcitenames=2,uniquelist=false]{biblatex}
 \renewcommand*{\nameyeardelim}{\addcomma\addspace}
 \addbibresource{../references.bib}
 
@@ -40,10 +40,10 @@
 
 \begin{frame}{Motivation}
 
-
-Real-world systems face a severe model uncertainty
-under strict state and control constraints, whose maintaining is critical and related with the system safety
-
+\begin{itemize}[<+->]
+	\item Real-world systems face a severe {\red model uncertainty}\\~
+	\item Ensuring {\green safety} requires maintaining strict \\{\red state and control constraints}
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Setting}
@@ -83,14 +83,23 @@ under strict state and control constraints, whose maintaining is critical and re
 \end{alertblock}
 \pause[\thebeamerpauses]
 \begin{exampleblock}{Our work}
-	\begin{itemize}
-		\item A simple solution using \alert{intervals},
-		\item based on a \alert{recent predictor} [\cite{leurent2019interval}]
+	\begin{itemize}[<+->]
+		\item A simple solution using \alert{intervals}, based on a \alert{recent predictor} [\cite{leurent2019interval}]
+		\item Composed of 4 building blocks \begin{enumerate}
+			\item Model Estimation
+			\item State Prediction
+			\item Robust Stabilization
+			\item Robust Constraint Satisfaction
+		\end{enumerate}
 	\end{itemize}
 \end{exampleblock}
 \end{frame}
 
 \begin{frame}{Step 1: Model Estimation}
+
+\textbf{Objective}: Derive a tighter admissible set ${\orange \hat{\Theta}} \subsetneq \Theta$.
+
+\pause
 \begin{assumption}[Persistence of Excitation (PE)]
 	\label{assu:PE}
 	The features $\Phi(t)=[\phi_{1}y_{1}(t)\dots\phi_{d}y_{1}(t)]\in\Real^{p\times d}$ verify
@@ -99,35 +108,40 @@ under strict state and control constraints, whose maintaining is critical and re
 	\]
 \end{assumption}
 \pause
-Define \begin{equation*}
+Define the OLS estimate\begin{equation*}
 \hat{\theta}(t)=
 \left(\int_{0}^{t}\Phi^{\top}(s)\Phi(s)ds\right)^{-1}\int_{0}^{t}\Phi^{\top}(s)y(s)ds,\, t\geq\ell,
 \end{equation*}
-\pause
+\end{frame}
+
+\begin{frame}{Step 1: Model Estimation}
 \begin{proposition}[Admissible values $\hat{\Theta}(t)\subseteq\Theta$]
-%For all $t\geq\ell$,
-%	$
-%	|\hat{\theta}(t)-\theta|\leq\Delta\theta(\Vert x\Vert_{\infty})
-%	$
 	\begin{equation*}
 	\theta \in {\orange \hat{\Theta}(t)}=\Theta\bigcap_{\tau\in[\ell,t]}\{\tilde{\theta}\in\Real^{d}:|\hat{\theta}(\tau)-\tilde{\theta}|\leq\Delta\theta(X)\}.\label{eq:set_LS}
 	\end{equation*}
 \end{proposition}
+${\orange \hat{\Theta}(t)}$ \alert{shrinks} as we get more observations $y(\tau),\,\tau\leq t$.
+\begin{center}
+	\includegraphics[trim={0 1cm 0 1cm}, clip,width=0.43\linewidth]{img/ellipsoid}
+\end{center}
 \end{frame}
 
 \begin{frame}{Step 2: State Prediction}
-Given $\orange \hat{\Theta}(t)$, ${\red \underline\omega(s) \leq \omega(s) \leq \overline\omega(s)}$, ${\red \underline\eta(s) \leq \eta(s) \leq \overline\eta(s)}$, we want: 
-\begin{equation*}
-{\blue \ux(s)}\leq x(s)\leq{\blue \ox(s)},\quad\forall s\geq t.
-\end{equation*}
-
+Given our sources of uncertainty ${\red [\underline\omega,\overline\omega]}$, ${\red [\underline\eta,\overline\eta]}$, $\orange \hat{\Theta}(t)$, \\
+we want to bound the set of reachable states: 
 \begin{center}
 \includegraphics[width=0.35\linewidth]{img/interval-hull}
 \end{center}
+within an interval \useshortskip
+\begin{equation*}
+{\blue \ux(s)}\leq x(s)\leq{\blue \ox(s)},\quad\forall s\geq t.
+\end{equation*}\pause
 \begin{itemize}
+	\vspace*{-0.5cm}
 	\item[\incarrow] To derive this predictor, two possible \alert{representations of the uncertainty} over $A(\theta)$ can be used.
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Step 2: Interval Uncertainty}
 For all $\theta\in\hat{\Theta}(t)$,
@@ -150,7 +164,7 @@ ensures the inclusion property.
 \end{center}
 \end{frame}
 
-\begin{frame}{Step 2: Polytopic Uncertainty} $\forall\theta\in\hat{\Theta}(t)$, ${\orange A(\theta)}\in\left\{ {\orange A_{0}+\sum_{i=1}^{2^{d}}\alpha_{i}\Delta A_{i}}:\alpha_{i}\geq0,\sum_{i=1}^{2^{d}}\alpha_{i}=1\right\}$
+\begin{frame}{Step 2: Polytopic Uncertainty} $\forall\theta\in\hat{\Theta}(t)$, ${\orange A(\theta)}\in\left\{ {\orange A_{0}+\sum_{i=1}^{2^{d}}\alpha_{i}\Delta A_{i}}\right\}$ with ${\orange A_0}$ {\red Metzler}.
 \begin{proposition}[Enhanced predictor of \cite{leurent2019interval}]
 	{\small
 	\begin{align*}
@@ -191,6 +205,9 @@ We propose to look for a {\green control} in the form
 u(t)={\green K_{0}}{\blue \xi(t)}+{\green K_{1}}{\blue \xi^{+}(t)}+{\green K_{2}}{\blue \xi^{-}(t)}+ {\green S}{\red \begin{bmatrix}\underline{\omega}(t) & \overline{\omega}(t)\end{bmatrix}}^\top
 \end{equation*}
 \end{exampleblock}
+\begin{flushright}
+How to choose the gains?
+\end{flushright}
 \end{frame}
 
 \begin{frame}{Step 3: Robust Stabilization}
@@ -236,11 +253,11 @@ All trajectories are asymptotically attracted into \useshortskip
 \begin{alertblock}{But...}
 	Constraints $x\in\X,\,u\in\U$ are not enforced.
 \end{alertblock}
-
+\pause
 \begin{exampleblock}{Idea}
 	\begin{enumerate}
 		\item Assume the constraints hold asymptotically: $$\X_{f}\subset\X^{2}\text{  and  }u(\X_f) \subset\U$$
-		\item Find an open-loop control to reach $X_f$ under the constraints $x\in\X,\,u\in\U$.
+		\item Find an open-loop control to reach $\X_f$ under the constraints $x\in\X,\,u\in\U$.
 	\end{enumerate}
 \end{exampleblock}
 \end{frame}
@@ -278,6 +295,7 @@ All trajectories are asymptotically attracted into \useshortskip
 		\item the {robust MPC}
 	\end{itemize}
 	has the following properties:
+	\pause
 	\begin{enumerate}[<+->]
 		\item \alert{Input-to-state stability} for ${\blue \underline{x},\;\overline{x}}$ and practical
 		input-to-state stability for $x$ with respect to ${\red \underline{\omega},\overline{\omega}}$
@@ -290,10 +308,11 @@ All trajectories are asymptotically attracted into \useshortskip
 
 \begin{frame}{Numerical Experiment}
 Autonomous vehicle with {\orange unknown tire friction}
-\begin{itemize}
-	\item \textbf{State}: $$x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\top $$
+\pause
+\begin{itemize}[<+->]
+	\item \textbf{State}: \useshortskip $$x = \begin{bmatrix} {p_y} & {\psi} & {v_y} & {r} \end{bmatrix}^\top $$
 	\item \textbf{Dynamics}: Dynamical Bicycle Model [\cite{awan2014compensation}] with unknown tire friction coefficients ${\orange \theta = \begin{bmatrix} C_{\alpha_f} & C_{\alpha_r}\end{bmatrix}^\transp}$
-	\[
+	\useshortskip \[
 	\small
 	A = \begin{bmatrix}
 	0 & v_x & 1 & 0 \\
