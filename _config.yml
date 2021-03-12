@@ -1,0 +1,28 @@
+theme: jekyll-theme-cayman
+title: "Robust-Adaptive Interval Predictive Control"
+description: "for Linear Uncertain Systems"
+
+github:
+  repository_url: https://github.com/eleurent/robust-constraint-satisfaction
+
+
+publication:
+  name: CDC 2020
+  url: https://cdc2020.ieeecss.org/
+
+paper_url: https://ieeexplore.ieee.org/document/9304308
+
+authors:
+  - name: Edouard Leurent
+    url: http://edouardleurent.com
+    affiliation: INRIA SEQUEL & VALSE,<br>Renault
+
+  - name: Denis Efimov
+    url: http://researchers.lille.inria.fr/~efimov/
+    affiliation: INRIA VALSE
+    affiliation_url: https://team.inria.fr/valse/
+
+  - name: Odalric-Ambrym Maillard
+    url: http://odalricambrymmaillard.neowordpress.fr/
+    affiliation: INRIA SEQUEL
+    affiliation_url: https://team.inria.fr/sequel/
